@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack serve --open --config webpack.prod.ts",
-    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --progress --config webpack.dev.ts"
+    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --progress --config webpack.dev.ts",
+    "pages": "git subtree push --prefix dist origin gh-pages"
   },
   "devDependencies": {
     "@types/node": "^20.10.4",
