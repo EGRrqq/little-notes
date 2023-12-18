@@ -3,11 +3,8 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 import webpack from "webpack";
-// in case you run into any typescript error when configuring `devServer`
-import "webpack-dev-server";
 
 const base: webpack.Configuration = {
-  mode: "production",
   entry: {
     index: "./src/index.ts",
   },
