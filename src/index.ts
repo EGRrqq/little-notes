@@ -1,65 +1,21 @@
 import "./style.css";
 
-window.addEventListener("load", setCanvasFullSize, { once: true });
+import { CanvasController } from "./canvasController";
+import { MouseController, TouchController } from "./canvasController/inputs";
+import { Pen } from "./canvasController/tools";
 
-const canvas = document.getElementById("board") as HTMLCanvasElement;
+const board = document.getElementById("board") as HTMLCanvasElement;
 
-const ctx = canvas.getContext("2d");
+const boardController = new CanvasController(board);
 
-let prevX: number;
-let prevY: number;
-let pressed = false;
+// tools = []
+// inputs = []
 
-// mouse support
-canvas.addEventListener("mousemove", (e) => {
-  if (pressed) {
-    pen(e.clientX, e.clientY);
-  }
+// attach the method to modules instead of just passing it to the constructor
+const pen = new Pen(boardController);
+const mouseController = new MouseController(boardController, pen);
+const touchController = new TouchController(boardController, pen);
+
+window.addEventListener("load", boardController.setCanvasFullSize, {
+  once: true,
 });
-
-canvas.addEventListener("mousedown", (e) => {
-  pressed = true;
-
-  prevX = e.clientX;
-  prevY = e.clientY;
-});
-
-canvas.addEventListener("mouseup", () => {
-  pressed = false;
-});
-
-// touch support
-canvas.addEventListener("touchend", () => {
-  pressed = false;
-});
-
-canvas.addEventListener("touchmove", (e) => {
-  e.preventDefault();
-  if (pressed) {
-    pen(e.touches[0].pageX, e.touches[0].pageY);
-  }
-});
-
-canvas.addEventListener("touchstart", (e) => {
-  pressed = true;
-
-  prevX = e.touches[0].pageX;
-  prevY = e.touches[0].pageY;
-});
-
-function pen(curX: number, curY: number) {
-  if (ctx) {
-    ctx.moveTo(prevX, prevY);
-    ctx.lineTo(curX, curY);
-    ctx.closePath();
-    ctx.stroke();
-
-    prevX = curX;
-    prevY = curY;
-  }
-}
-
-function setCanvasFullSize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
