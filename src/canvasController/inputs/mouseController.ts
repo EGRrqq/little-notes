@@ -1,5 +1,4 @@
 import { CanvasController } from "..";
-import { Pen } from "../tools";
 import { pointerData } from "./pointerData";
 
 interface IMouseController {
@@ -10,11 +9,9 @@ interface IMouseController {
 
 export class MouseController implements IMouseController {
   #canvasController: CanvasController;
-  #pen: Pen;
 
-  constructor(canvasController: CanvasController, pen: Pen) {
+  constructor(canvasController: CanvasController) {
     this.#canvasController = canvasController;
-    this.#pen = pen;
 
     this.#canvasController.canvas.addEventListener(
       "mousedown",
@@ -35,9 +32,7 @@ export class MouseController implements IMouseController {
 
   onMouseMove = (e: MouseEvent) => {
     if (pointerData.pressed) {
-      // get selectedTool()
-      // selectedTool(e.clientX, e.clientY)
-      this.#pen.draw(e.clientX, e.clientY);
+      this.#canvasController.selectedTool?.draw(e.clientX, e.clientY);
     }
   };
 

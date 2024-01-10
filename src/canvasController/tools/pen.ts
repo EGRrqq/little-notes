@@ -1,11 +1,8 @@
+import { ITool } from ".";
 import { CanvasController } from "..";
 import { pointerData } from "../inputs/pointerData";
 
-interface IPen {
-  draw(curX: number, curY: number): void;
-}
-
-export class Pen implements IPen {
+export class Pen implements ITool {
   #canvasController: CanvasController;
 
   constructor(canvasController: CanvasController) {

@@ -8,13 +8,15 @@ const board = document.getElementById("board") as HTMLCanvasElement;
 
 const boardController = new CanvasController(board);
 
+// inputs with attach/detach methods
+new MouseController(boardController);
+new TouchController(boardController);
+
 // tools = []
 // inputs = []
 
-// attach the method to modules instead of just passing it to the constructor
 const pen = new Pen(boardController);
-const mouseController = new MouseController(boardController, pen);
-const touchController = new TouchController(boardController, pen);
+boardController.selectTool = pen;
 
 window.addEventListener("load", boardController.setCanvasFullSize, {
   once: true,
