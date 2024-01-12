@@ -9,17 +9,18 @@ const board = document.getElementById("board") as HTMLCanvasElement;
 
 const boardController = new CanvasController(board);
 
-// inputs with attach/detach methods
-new MouseController(boardController);
-new TouchController(boardController);
-
-// tools = []
 // inputs = []
+const mouseController = new MouseController(boardController);
+const touchController = new TouchController(boardController);
+
+mouseController.attach();
+touchController.attach();
 
 const cacheController = new CacheController(boardController);
 cacheController.mouseAttach();
 cacheController.touchAttach();
 
+// tools = []
 const pen = new Pen(boardController);
 boardController.selectTool = pen;
 
