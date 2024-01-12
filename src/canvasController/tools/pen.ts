@@ -9,8 +9,9 @@ export class Pen implements ITool {
     this.#canvasController = canvasController;
   }
 
-  draw(curX: number, curY: number) {
+  draw = (curX: number, curY: number) => {
     if (this.#canvasController.ctx) {
+      // ctx.save() for pen settings
       this.#canvasController.ctx.moveTo(...pointerData.getPrevValues());
       this.#canvasController.ctx.lineTo(curX, curY);
       this.#canvasController.ctx.closePath();
@@ -19,5 +20,5 @@ export class Pen implements ITool {
       // possible to split function into two diff, like draw and save state
       pointerData.setPrevValues(curX, curY);
     }
-  }
+  };
 }
