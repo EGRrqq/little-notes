@@ -17,3 +17,7 @@ body {
 
   background-color: tan;
 }
+
+canvas {
+  cursor: crosshair;
+}
