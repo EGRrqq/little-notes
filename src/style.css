@@ -14,10 +14,14 @@
 
 body {
   min-height: 100dvh;
+  overflow: hidden;
+  white-space: nowrap;
 
   background-color: tan;
 }
 
 canvas {
+  position: absolute;
+
   cursor: crosshair;
 }
