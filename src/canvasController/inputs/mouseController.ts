@@ -1,4 +1,5 @@
-import { CanvasController } from "..";
+import { CacheController, ICacheController } from "../canvasData/cache";
+import { ITollsController } from "../tools";
 import { pointerData } from "./pointerData";
 
 interface IMouseController {
@@ -6,40 +7,47 @@ interface IMouseController {
 }
 
 export class MouseController implements IMouseController {
-  #canvasController: CanvasController;
+  #canvasEl: HTMLCanvasElement;
+  #toolsController: ITollsController;
+  #cacheController: ICacheController;
 
-  constructor(canvasController: CanvasController) {
-    this.#canvasController = canvasController;
+  #pressed = false;
+
+  constructor(canvas: HTMLCanvasElement, tools: ITollsController) {
+    this.#canvasEl = canvas;
+    this.#toolsController = tools;
+
+    this.#cacheController = new CacheController(this.#toolsController);
   }
 
   attach() {
-    this.#canvasController.canvas.addEventListener(
-      "mousedown",
-      this.#onMouseDown
-    );
+    this.#canvasEl.addEventListener("mousedown", this.#onMouseDown);
 
-    this.#canvasController.canvas.addEventListener(
-      "mousemove",
-      this.#onMouseMove
-    );
+    this.#canvasEl.addEventListener("mousemove", this.#onMouseMove);
 
-    this.#canvasController.canvas.addEventListener("mouseup", this.#onMouseUp);
+    this.#canvasEl.addEventListener("mouseup", this.#onMouseUp);
   }
 
   #onMouseDown = (e: MouseEvent) => {
-    pointerData.pressed = true;
+    this.#pressed = true;
 
+    // remove pointerData
     pointerData.setPrevValues(e.clientX, e.clientY);
+
+    this.#cacheController.onPointerDown(e.clientX, e.clientY);
   };
 
   #onMouseMove = (e: MouseEvent) => {
-    if (pointerData.pressed) {
+    if (this.#pressed) {
       // canvas.getBoundingClientRect() is a common way to obtain the position of an element relative to the viewport
-      this.#canvasController.selectedTool?.draw(e.clientX, e.clientY);
+      this.#toolsController.selectedTool.draw(e.clientX, e.clientY);
+
+      this.#cacheController.onPointerMove(e.clientX, e.clientY);
     }
   };
 
-  #onMouseUp = () => {
-    pointerData.pressed = false;
+  #onMouseUp = (e: MouseEvent) => {
+    this.#pressed = false;
+    this.#cacheController.onPointerUp(e.clientX, e.clientY);
   };
 }

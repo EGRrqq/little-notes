@@ -1,4 +1,5 @@
-import { CanvasController } from "..";
+import { CacheController, ICacheController } from "../canvasData/cache";
+import { ITollsController } from "../tools";
 import { pointerData } from "./pointerData";
 
 interface ITouchController {
@@ -6,47 +7,56 @@ interface ITouchController {
 }
 
 export class TouchController implements ITouchController {
-  #canvasController: CanvasController;
+  #canvasEl: HTMLCanvasElement;
+  #toolsController: ITollsController;
+  #cacheController: ICacheController;
 
-  constructor(canvasController: CanvasController) {
-    this.#canvasController = canvasController;
+  #pressed = false;
+
+  constructor(canvas: HTMLCanvasElement, tools: ITollsController) {
+    this.#canvasEl = canvas;
+    this.#toolsController = tools;
+
+    this.#cacheController = new CacheController(this.#toolsController);
   }
 
   attach() {
-    this.#canvasController.canvas.addEventListener(
-      "touchstart",
-      this.#onTouchStart
-    );
+    this.#canvasEl.addEventListener("touchstart", this.#onTouchStart);
 
-    this.#canvasController.canvas.addEventListener(
-      "touchmove",
-      this.#onTouchMove
-    );
+    this.#canvasEl.addEventListener("touchmove", this.#onTouchMove);
 
-    this.#canvasController.canvas.addEventListener(
-      "touchend",
-      this.#onTouchEnd
-    );
+    this.#canvasEl.addEventListener("touchend", this.#onTouchEnd);
   }
 
   #onTouchStart = (e: TouchEvent) => {
-    pointerData.pressed = true;
+    this.#pressed = true;
 
     pointerData.setPrevValues(e.touches[0].pageX, e.touches[0].pageY);
+    this.#cacheController.onPointerDown(e.touches[0].pageX, e.touches[0].pageY);
   };
 
   #onTouchMove = (e: TouchEvent) => {
     e.preventDefault();
 
-    if (pointerData.pressed) {
-      this.#canvasController.selectedTool?.draw(
+    if (this.#pressed) {
+      this.#toolsController.selectedTool.draw(
+        e.touches[0].pageX,
+        e.touches[0].pageY
+      );
+
+      this.#cacheController.onPointerMove(
         e.touches[0].pageX,
         e.touches[0].pageY
       );
     }
   };
 
-  #onTouchEnd = () => {
-    pointerData.pressed = false;
+  #onTouchEnd = (e: TouchEvent) => {
+    this.#pressed = false;
+
+    this.#cacheController.onPointerUp(
+      e.changedTouches[0].pageX,
+      e.changedTouches[0].pageY
+    );
   };
 }
