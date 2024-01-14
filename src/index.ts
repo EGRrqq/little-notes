@@ -3,7 +3,7 @@ import "./style.css";
 import { CanvasController } from "./canvasController";
 import { MouseController, TouchController } from "./canvasController/inputs";
 import { Pen } from "./canvasController/tools";
-import { CacheController } from "./canvasController/features";
+import { CacheController } from "./canvasController/cache";
 
 const board = document.getElementById("board") as HTMLCanvasElement;
 
