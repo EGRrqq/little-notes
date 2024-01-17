@@ -11,8 +11,6 @@ export class MouseController implements IMouseController {
   #toolsController: ITollsController;
   #cacheController: ICacheController;
 
-  #pressed = false;
-
   constructor(canvas: HTMLCanvasElement, tools: ITollsController) {
     this.#canvasEl = canvas;
     this.#toolsController = tools;
@@ -22,32 +20,33 @@ export class MouseController implements IMouseController {
 
   attach() {
     this.#canvasEl.addEventListener("mousedown", this.#onMouseDown);
-
     this.#canvasEl.addEventListener("mousemove", this.#onMouseMove);
-
     this.#canvasEl.addEventListener("mouseup", this.#onMouseUp);
   }
 
   #onMouseDown = (e: MouseEvent) => {
-    this.#pressed = true;
+    pointerData.pressed = true;
 
-    // remove pointerData
     pointerData.setPrevValues(e.clientX, e.clientY);
-
     this.#cacheController.onPointerDown(e.clientX, e.clientY);
   };
 
   #onMouseMove = (e: MouseEvent) => {
-    if (this.#pressed) {
-      // canvas.getBoundingClientRect() is a common way to obtain the position of an element relative to the viewport
-      this.#toolsController.selectedTool.draw(e.clientX, e.clientY);
+    if (pointerData.pressed) {
+      this.#toolsController.selectedTool.draw(
+        ...pointerData.getPrevValues(),
+        e.clientX,
+        e.clientY
+      );
 
+      pointerData.setPrevValues(e.clientX, e.clientY);
       this.#cacheController.onPointerMove(e.clientX, e.clientY);
     }
   };
 
   #onMouseUp = (e: MouseEvent) => {
-    this.#pressed = false;
+    pointerData.pressed = false;
+
     this.#cacheController.onPointerUp(e.clientX, e.clientY);
   };
 }

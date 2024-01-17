@@ -23,6 +23,9 @@ if (boardController.ctx) {
   touchController.attach();
 }
 
+// for move use ctx.translate()
+// for zoom use ctx.scale()
+
 window.addEventListener("load", boardController.setCanvasFullSize, {
   once: true,
 });

@@ -11,8 +11,6 @@ export class TouchController implements ITouchController {
   #toolsController: ITollsController;
   #cacheController: ICacheController;
 
-  #pressed = false;
-
   constructor(canvas: HTMLCanvasElement, tools: ITollsController) {
     this.#canvasEl = canvas;
     this.#toolsController = tools;
@@ -22,14 +20,12 @@ export class TouchController implements ITouchController {
 
   attach() {
     this.#canvasEl.addEventListener("touchstart", this.#onTouchStart);
-
     this.#canvasEl.addEventListener("touchmove", this.#onTouchMove);
-
     this.#canvasEl.addEventListener("touchend", this.#onTouchEnd);
   }
 
   #onTouchStart = (e: TouchEvent) => {
-    this.#pressed = true;
+    pointerData.pressed = true;
 
     pointerData.setPrevValues(e.touches[0].pageX, e.touches[0].pageY);
     this.#cacheController.onPointerDown(e.touches[0].pageX, e.touches[0].pageY);
@@ -38,12 +34,14 @@ export class TouchController implements ITouchController {
   #onTouchMove = (e: TouchEvent) => {
     e.preventDefault();
 
-    if (this.#pressed) {
+    if (pointerData.pressed) {
       this.#toolsController.selectedTool.draw(
+        ...pointerData.getPrevValues(),
         e.touches[0].pageX,
         e.touches[0].pageY
       );
 
+      pointerData.setPrevValues(e.touches[0].pageX, e.touches[0].pageY);
       this.#cacheController.onPointerMove(
         e.touches[0].pageX,
         e.touches[0].pageY
@@ -52,7 +50,7 @@ export class TouchController implements ITouchController {
   };
 
   #onTouchEnd = (e: TouchEvent) => {
-    this.#pressed = false;
+    pointerData.pressed = true;
 
     this.#cacheController.onPointerUp(
       e.changedTouches[0].pageX,

@@ -24,13 +24,11 @@ export class CacheController implements ICacheController {
   }
 
   onPointerDown = (x: number, y: number) => {
-    // create or reset cache obj
     this.#cache = new ToolData();
 
-    // set tool type
     this.#cache.type = this.#toolsController.selectedTool.type;
 
-    // set x and y, set up origin point
+    // set up origin point
     // to calculate points from new origin point
     this.#cache.x = x;
     this.#cache.y = y;
@@ -40,14 +38,11 @@ export class CacheController implements ICacheController {
   };
 
   onPointerMove = (x: number, y: number) => {
-    // set points for cache object
     this.#cache.point = [x - this.#cache.x, y - this.#cache.y];
+    this.#cache.lastPoint = [x - this.#cache.x, y - this.#cache.y];
   };
 
   onPointerUp = (x: number, y: number) => {
-    // set last point
-    this.#cache.lastPoint = [x - this.#cache.x, y - this.#cache.y];
-
     // set width/height
 
     // set data to IFile
