@@ -1,10 +1,10 @@
-import { IElement } from "./IElement";
+import { ITool } from "./ITool";
 import { IFile } from "./IFile";
 
 export interface IData {
   type: string;
-  elements: IElement[];
+  elements: ITool[];
   files: Record<IFile["id"], IFile>;
 }
 
-export type { IElement, IFile };
+export type { ITool as IElement, IFile };

@@ -1,5 +1,5 @@
 import { ITollsController } from "../../tools";
-import { ToolData } from "../../tools/ToolData";
+import { ToolData } from "../Data/Tool";
 
 export interface ICacheController {
   onPointerDown(x: number, y: number): void;
