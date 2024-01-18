@@ -3,6 +3,7 @@ import "./style.css";
 import { CanvasController } from "./canvasController";
 import { MouseController, TouchController } from "./canvasController/inputs";
 import { Pen, ToolsController } from "./canvasController/tools";
+import { CacheController } from "./canvasController/canvasData/cache";
 
 const board = document.getElementById("board") as HTMLCanvasElement;
 const boardController = new CanvasController(board);
@@ -22,10 +23,11 @@ if (boardController.ctx) {
   mouseController.attach();
   touchController.attach();
 
-  // need single cache controller for all inputs
-  // now all input create it separately
-  // maybe it better to create cacheController in that file
-  // and use attach method
+  // cache setup
+  const cacheController = new CacheController(toolsController);
+
+  cacheController.mouseAttach();
+  cacheController.touchAttach();
 }
 
 // for move use ctx.translate()

@@ -1,4 +1,3 @@
-import { CacheController, ICacheController } from "../canvasData/cache";
 import { ITollsController } from "../tools";
 import { pointerData } from "./pointerData";
 
@@ -6,16 +5,14 @@ interface ITouchController {
   attach(): void;
 }
 
+// need multi touch support
 export class TouchController implements ITouchController {
   #canvasEl: HTMLCanvasElement;
   #toolsController: ITollsController;
-  #cacheController: ICacheController;
 
   constructor(canvas: HTMLCanvasElement, tools: ITollsController) {
     this.#canvasEl = canvas;
     this.#toolsController = tools;
-
-    this.#cacheController = new CacheController(this.#toolsController);
   }
 
   attach() {
@@ -28,10 +25,6 @@ export class TouchController implements ITouchController {
     pointerData.pressed = true;
 
     pointerData.setPrevValues(e.touches[0].clientX, e.touches[0].clientY);
-    this.#cacheController.onPointerDown(
-      Math.round(e.touches[0].clientX),
-      Math.round(e.touches[0].clientY)
-    );
   };
 
   #onTouchMove = (e: TouchEvent) => {
@@ -45,15 +38,10 @@ export class TouchController implements ITouchController {
       );
 
       pointerData.setPrevValues(e.touches[0].clientX, e.touches[0].clientY);
-      this.#cacheController.onPointerMove(
-        Math.round(e.touches[0].clientX),
-        Math.round(e.touches[0].clientY)
-      );
     }
   };
 
   #onTouchEnd = () => {
     pointerData.pressed = true;
-    this.#cacheController.onPointerUp();
   };
 }

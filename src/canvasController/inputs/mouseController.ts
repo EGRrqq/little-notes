@@ -1,4 +1,3 @@
-import { CacheController, ICacheController } from "../canvasData/cache";
 import { ITollsController } from "../tools";
 import { pointerData } from "./pointerData";
 
@@ -9,13 +8,10 @@ interface IMouseController {
 export class MouseController implements IMouseController {
   #canvasEl: HTMLCanvasElement;
   #toolsController: ITollsController;
-  #cacheController: ICacheController;
 
   constructor(canvas: HTMLCanvasElement, tools: ITollsController) {
     this.#canvasEl = canvas;
     this.#toolsController = tools;
-
-    this.#cacheController = new CacheController(this.#toolsController);
   }
 
   attach() {
@@ -28,7 +24,6 @@ export class MouseController implements IMouseController {
     pointerData.pressed = true;
 
     pointerData.setPrevValues(e.clientX, e.clientY);
-    this.#cacheController.onPointerDown(e.clientX, e.clientY);
   };
 
   #onMouseMove = (e: MouseEvent) => {
@@ -40,12 +35,10 @@ export class MouseController implements IMouseController {
       );
 
       pointerData.setPrevValues(e.clientX, e.clientY);
-      this.#cacheController.onPointerMove(e.clientX, e.clientY);
     }
   };
 
   #onMouseUp = () => {
     pointerData.pressed = false;
-    this.#cacheController.onPointerUp();
   };
 }

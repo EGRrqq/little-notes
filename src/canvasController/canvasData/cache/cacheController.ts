@@ -2,12 +2,13 @@ import { ITollsController } from "../../tools";
 import { Data, ElementData } from "../Data";
 
 export interface ICacheController {
-  onPointerDown(x: number, y: number): void;
-  onPointerMove(x: number, y: number): void;
-  onPointerUp(): void;
+  mouseAttach(): void;
+  touchAttach(): void;
 }
 
 export class CacheController implements ICacheController {
+  #captureFlag = false;
+
   #appData = new Data();
   #storageDataKey = "LittleNotes";
 
@@ -22,6 +23,36 @@ export class CacheController implements ICacheController {
     if (storageData) {
       this.#appData.elements = JSON.parse(storageData);
     }
+  }
+
+  mouseAttach(): void {
+    window.addEventListener("mousedown", (e: MouseEvent) =>
+      this.#onPointerDown(e.clientX, e.clientY)
+    );
+
+    window.addEventListener("mousemove", (e: MouseEvent) =>
+      this.#onPointerMove(e.clientX, e.clientY)
+    );
+
+    window.addEventListener("mouseup", () => this.#onPointerUp());
+  }
+
+  touchAttach(): void {
+    window.addEventListener("touchstart", (e: TouchEvent) =>
+      this.#onPointerDown(
+        Math.round(e.touches[0].clientX),
+        Math.round(e.touches[0].clientY)
+      )
+    );
+
+    window.addEventListener("touchmove", (e: TouchEvent) =>
+      this.#onPointerMove(
+        Math.round(e.touches[0].clientX),
+        Math.round(e.touches[0].clientY)
+      )
+    );
+
+    window.addEventListener("touchend", () => this.#onPointerUp());
   }
 
   get #dataKey() {
@@ -40,7 +71,9 @@ export class CacheController implements ICacheController {
     this.#toolCache = data;
   }
 
-  onPointerDown = (x: number, y: number) => {
+  #onPointerDown = (x: number, y: number) => {
+    this.#captureFlag = true;
+
     this.#cache = new ElementData();
 
     this.#cache.type = this.#toolsController.selectedTool.type;
@@ -54,12 +87,16 @@ export class CacheController implements ICacheController {
     this.#cache.point = [0, 0];
   };
 
-  onPointerMove = (x: number, y: number) => {
-    this.#cache.point = [x - this.#cache.x, y - this.#cache.y];
-    this.#cache.lastPoint = [x - this.#cache.x, y - this.#cache.y];
+  #onPointerMove = (x: number, y: number) => {
+    if (this.#captureFlag) {
+      this.#cache.point = [x - this.#cache.x, y - this.#cache.y];
+      this.#cache.lastPoint = [x - this.#cache.x, y - this.#cache.y];
+    }
   };
 
-  onPointerUp = () => {
+  #onPointerUp = () => {
+    this.#captureFlag = false;
+
     this.#data.pushElement(this.#cache.elementData);
     localStorage.setItem(this.#dataKey, JSON.stringify(this.#data.elements));
 
