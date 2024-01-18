@@ -8,7 +8,10 @@ interface ITouchController {
 // todo:
 // multi touch support
 // work with touches array, not just a touches[0]
-// store all touches separately also a great idea
+// on each touch new Element creates
+
+// todo(for each controllers):
+// remove ITollsController dependency
 export class TouchController implements ITouchController {
   #canvasEl: HTMLCanvasElement;
   #toolsController: ITollsController;
@@ -34,7 +37,7 @@ export class TouchController implements ITouchController {
     e.preventDefault();
 
     if (pointerData.pressed) {
-      this.#toolsController.selectedTool.draw(
+      this.#toolsController.activeTool.draw(
         ...pointerData.getPrevValues(),
         Math.round(e.touches[0].clientX),
         Math.round(e.touches[0].clientY)

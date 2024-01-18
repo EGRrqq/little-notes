@@ -8,6 +8,8 @@ export interface ICacheController {
   touchAttach(): void;
 }
 
+// todo(for each controllers):
+// remove ITollsController dependency
 export class CacheController implements ICacheController {
   #captureFlag = false;
 
@@ -69,7 +71,7 @@ export class CacheController implements ICacheController {
       let x1 = this.#cache.points[i + 1][0];
       let y1 = this.#cache.points[i + 1][1];
 
-      this.#toolsController.selectedTool.draw(x0, y0, x1, y1);
+      this.#toolsController.activeTool.draw(x0, y0, x1, y1);
     }
   };
 
@@ -94,7 +96,7 @@ export class CacheController implements ICacheController {
 
     this.#cache = new ElementData();
 
-    this.#cache.type = this.#toolsController.selectedTool.type;
+    this.#cache.type = this.#toolsController.activeTool.type;
 
     // set up origin point
     // to calculate points from new origin point

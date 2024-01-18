@@ -11,10 +11,9 @@ const boardController = new CanvasController(board);
 if (boardController.ctx) {
   // available tools
   const pen = new Pen(boardController.ctx);
-  const toolsList = [pen];
+  const toolList = [pen];
 
-  const toolsController = new ToolsController(toolsList, pen.type);
-  boardController.tools = toolsController;
+  const toolsController = new ToolsController(toolList, pen.type);
 
   // inputs = []
   const mouseController = new MouseController(board, toolsController);

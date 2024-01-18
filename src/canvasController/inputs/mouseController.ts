@@ -5,6 +5,8 @@ interface IMouseController {
   attach(): void;
 }
 
+// todo(for each controllers):
+// remove ITollsController dependency
 export class MouseController implements IMouseController {
   #canvasEl: HTMLCanvasElement;
   #toolsController: ITollsController;
@@ -28,7 +30,7 @@ export class MouseController implements IMouseController {
 
   #onMouseMove = (e: MouseEvent) => {
     if (pointerData.pressed) {
-      this.#toolsController.selectedTool.draw(
+      this.#toolsController.activeTool.draw(
         ...pointerData.getPrevValues(),
         e.clientX,
         e.clientY

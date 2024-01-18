@@ -2,32 +2,32 @@ import { ITool } from "./ITool";
 
 export interface ITollsController {
   tools: Record<ITool["type"], ITool>;
-  selectedTool: ITool;
+  activeTool: ITool;
 }
 
 export class ToolsController implements ITollsController {
   #tools: Record<ITool["type"], ITool>;
-  #selectedTool: ITool;
+  #activeTool: ITool;
 
-  constructor(toolsList: ITool[], defaultToolType = "pen") {
+  constructor(toolList: ITool[], defaultToolType = "pen") {
     this.#tools = {};
 
-    for (let tool of toolsList) {
+    for (let tool of toolList) {
       this.#tools[tool.type] = tool;
     }
 
-    this.#selectedTool = this.#tools[defaultToolType];
+    this.#activeTool = this.#tools[defaultToolType];
   }
 
   get tools() {
     return this.#tools;
   }
 
-  get selectedTool(): ITool {
-    return this.#selectedTool;
+  get activeTool(): ITool {
+    return this.#activeTool;
   }
 
-  set selectedTool(tool: ITool) {
-    this.#selectedTool = tool;
+  set activeTool(tool: ITool) {
+    this.#activeTool = tool;
   }
 }
