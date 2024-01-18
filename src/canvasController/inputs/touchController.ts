@@ -5,7 +5,10 @@ interface ITouchController {
   attach(): void;
 }
 
-// need multi touch support
+// todo:
+// multi touch support
+// work with touches array, not just a touches[0]
+// store all touches separately also a great idea
 export class TouchController implements ITouchController {
   #canvasEl: HTMLCanvasElement;
   #toolsController: ITollsController;

@@ -2,6 +2,8 @@ import { ITollsController } from "../../tools";
 import { Data, ElementData } from "../Data";
 
 export interface ICacheController {
+  originPoint: [number, number];
+
   mouseAttach(): void;
   touchAttach(): void;
 }
@@ -55,6 +57,22 @@ export class CacheController implements ICacheController {
     window.addEventListener("touchend", () => this.#onPointerUp());
   }
 
+  get originPoint(): [number, number] {
+    return [this.#cache.x, this.#cache.y];
+  }
+
+  iterateOverPoints = () => {
+    for (let i = 0, length = this.#cache.points.length - 1; i < length; i++) {
+      let x0 = this.#cache.points[i][0];
+      let y0 = this.#cache.points[i][1];
+
+      let x1 = this.#cache.points[i + 1][0];
+      let y1 = this.#cache.points[i + 1][1];
+
+      this.#toolsController.selectedTool.draw(x0, y0, x1, y1);
+    }
+  };
+
   get #dataKey() {
     return this.#storageDataKey;
   }
@@ -85,6 +103,7 @@ export class CacheController implements ICacheController {
 
     // first coord, basically onMouseDown coord
     this.#cache.point = [0, 0];
+    this.#cache.lastPoint = [0, 0];
   };
 
   #onPointerMove = (x: number, y: number) => {
@@ -101,11 +120,5 @@ export class CacheController implements ICacheController {
     localStorage.setItem(this.#dataKey, JSON.stringify(this.#data.elements));
 
     // set width/height
-
-    console.log(this.#data.elements);
-    console.log(this.#cache.elementData);
-    console.log("--------------");
   };
-
-  // requestAnimationFrame(redraw)
 }

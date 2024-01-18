@@ -28,6 +28,19 @@ if (boardController.ctx) {
 
   cacheController.mouseAttach();
   cacheController.touchAttach();
+
+  const redrawData = () => {
+    boardController.moveOriginPointTo(...cacheController.originPoint);
+    cacheController.iterateOverPoints();
+    boardController.resetOriginPoint();
+  };
+
+  window.addEventListener("resize", () => {
+    boardController.setCanvasFullSize();
+    boardController.clearCanvasData();
+
+    requestAnimationFrame(redrawData);
+  });
 }
 
 // for move use ctx.translate()
@@ -36,5 +49,3 @@ if (boardController.ctx) {
 window.addEventListener("load", boardController.setCanvasFullSize, {
   once: true,
 });
-
-window.addEventListener("resize", boardController.setCanvasFullSize);

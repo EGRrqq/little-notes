@@ -1,5 +1,8 @@
 import { ITool } from "./ITool";
 
+// todo:
+// option for specific tool settings, like line stroke, color etc.
+// like draw(x, y, { lineWidth: 3, strokeStyle: #fff })
 export class Pen implements ITool {
   #context: CanvasRenderingContext2D;
   #type = "pen";
@@ -16,8 +19,6 @@ export class Pen implements ITool {
     return this.#type;
   }
 
-  // option for specific tool settings, like line stroke, color etc.
-  // like draw(x, y, { lineWidth: 3, strokeStyle: #fff })
   draw(x0: number, y0: number, x1: number, y1: number) {
     this.#ctx.beginPath();
     this.#ctx.moveTo(x0, y0);

@@ -4,6 +4,10 @@ interface IElementData {
   elementData: IElement;
 }
 
+// todo:
+// static method to remove object by id
+// like: ToolData.remove({id: "ryue25jfeoirieogh"});
+// static remove(id: string): void {}
 export class ElementData implements IElement, IElementData {
   #id: string = "";
   #points: [number, number][] = [];
@@ -73,12 +77,6 @@ export class ElementData implements IElement, IElementData {
     this.#lastPoint = pointArr;
   }
 
-  // static method to remove object by id
-  // like: ToolData.remove({id: "ryue25jfeoirieogh"});
-  // static remove(id: string): void {}
-
-  // method to push object into elements array in IData
-  // i think simple getter thats good, IData handle it by self
   get elementData(): IElement {
     return {
       id: this.id,

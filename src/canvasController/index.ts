@@ -4,9 +4,15 @@ export interface ICanvasController {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D | null;
 
+  moveOriginPointTo(x: number, y: number): void;
+  resetOriginPoint(): void;
+
   setCanvasFullSize(): void;
+  clearCanvasData(): void;
 }
 
+// todo:
+// move tools stuff to the toolsController
 export class CanvasController implements ICanvasController {
   #canvasEl: HTMLCanvasElement;
   #context: CanvasRenderingContext2D | null;
@@ -37,5 +43,18 @@ export class CanvasController implements ICanvasController {
   setCanvasFullSize = () => {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+  };
+
+  clearCanvasData = () => {
+    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  };
+
+  moveOriginPointTo = (x: number, y: number) => {
+    console.log("move", this);
+    this.ctx?.translate(x, y);
+  };
+
+  resetOriginPoint = () => {
+    this.ctx?.setTransform(1, 0, 0, 1, 0, 0);
   };
 }
