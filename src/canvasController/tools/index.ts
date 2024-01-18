@@ -1,4 +1,4 @@
 export { Pen } from "./pen";
-export { ToolData } from "../canvasData/Data/Tool";
+export { ElementData } from "../canvasData/Data/Element";
 export type { ITollsController } from "./ToolsController";
 export { ToolsController } from "./ToolsController";

@@ -1,30 +1,47 @@
 import { ITollsController } from "../../tools";
-import { ToolData } from "../Data/Tool";
+import { Data, ElementData } from "../Data";
 
 export interface ICacheController {
   onPointerDown(x: number, y: number): void;
   onPointerMove(x: number, y: number): void;
-  onPointerUp(x: number, y: number): void;
+  onPointerUp(): void;
 }
 
 export class CacheController implements ICacheController {
-  #toolCache = new ToolData();
+  #appData = new Data();
+  #storageDataKey = "LittleNotes";
+
+  #toolCache = new ElementData();
   #toolsController: ITollsController;
 
   constructor(toolsController: ITollsController) {
     this.#toolsController = toolsController;
+
+    const storageData = localStorage.getItem(this.#storageDataKey);
+
+    if (storageData) {
+      this.#appData.elements = JSON.parse(storageData);
+    }
+  }
+
+  get #dataKey() {
+    return this.#storageDataKey;
+  }
+
+  get #data() {
+    return this.#appData;
   }
 
   get #cache() {
     return this.#toolCache;
   }
 
-  set #cache(data: ToolData) {
+  set #cache(data: ElementData) {
     this.#toolCache = data;
   }
 
   onPointerDown = (x: number, y: number) => {
-    this.#cache = new ToolData();
+    this.#cache = new ElementData();
 
     this.#cache.type = this.#toolsController.selectedTool.type;
 
@@ -42,12 +59,16 @@ export class CacheController implements ICacheController {
     this.#cache.lastPoint = [x - this.#cache.x, y - this.#cache.y];
   };
 
-  onPointerUp = (x: number, y: number) => {
+  onPointerUp = () => {
+    this.#data.pushElement(this.#cache.elementData);
+    localStorage.setItem(this.#dataKey, JSON.stringify(this.#data.elements));
+
     // set width/height
 
-    // set data to IFile
-
-    console.log(this.#cache.toolData);
+    console.log(this.#data.elements);
+    console.log(this.#cache.elementData);
     console.log("--------------");
   };
+
+  // requestAnimationFrame(redraw)
 }

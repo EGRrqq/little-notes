@@ -3,3 +3,5 @@ export interface IFile {
   type: string;
   dataURL: string;
 }
+
+// store files in IndexedDB

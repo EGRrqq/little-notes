@@ -1,4 +1,4 @@
-export interface ITool {
+export interface IElement {
   id: string;
 
   // type: depend on tools pen, rectangle etc

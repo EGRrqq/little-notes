@@ -44,9 +44,8 @@ export class MouseController implements IMouseController {
     }
   };
 
-  #onMouseUp = (e: MouseEvent) => {
+  #onMouseUp = () => {
     pointerData.pressed = false;
-
-    this.#cacheController.onPointerUp(e.clientX, e.clientY);
+    this.#cacheController.onPointerUp();
   };
 }

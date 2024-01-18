@@ -27,8 +27,11 @@ export class TouchController implements ITouchController {
   #onTouchStart = (e: TouchEvent) => {
     pointerData.pressed = true;
 
-    pointerData.setPrevValues(e.touches[0].pageX, e.touches[0].pageY);
-    this.#cacheController.onPointerDown(e.touches[0].pageX, e.touches[0].pageY);
+    pointerData.setPrevValues(e.touches[0].clientX, e.touches[0].clientY);
+    this.#cacheController.onPointerDown(
+      Math.round(e.touches[0].clientX),
+      Math.round(e.touches[0].clientY)
+    );
   };
 
   #onTouchMove = (e: TouchEvent) => {
@@ -37,24 +40,20 @@ export class TouchController implements ITouchController {
     if (pointerData.pressed) {
       this.#toolsController.selectedTool.draw(
         ...pointerData.getPrevValues(),
-        e.touches[0].pageX,
-        e.touches[0].pageY
+        Math.round(e.touches[0].clientX),
+        Math.round(e.touches[0].clientY)
       );
 
-      pointerData.setPrevValues(e.touches[0].pageX, e.touches[0].pageY);
+      pointerData.setPrevValues(e.touches[0].clientX, e.touches[0].clientY);
       this.#cacheController.onPointerMove(
-        e.touches[0].pageX,
-        e.touches[0].pageY
+        Math.round(e.touches[0].clientX),
+        Math.round(e.touches[0].clientY)
       );
     }
   };
 
-  #onTouchEnd = (e: TouchEvent) => {
+  #onTouchEnd = () => {
     pointerData.pressed = true;
-
-    this.#cacheController.onPointerUp(
-      e.changedTouches[0].pageX,
-      e.changedTouches[0].pageY
-    );
+    this.#cacheController.onPointerUp();
   };
 }

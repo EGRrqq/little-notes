@@ -1,10 +1,10 @@
-import { ITool } from "./ITool";
+import { IElement } from "./IElement";
 
-interface IToolData {
-  toolData: ITool;
+interface IElementData {
+  elementData: IElement;
 }
 
-export class ToolData implements ITool, IToolData {
+export class ElementData implements IElement, IElementData {
   #id: string = "";
   #points: [number, number][] = [];
   #type: string = "";
@@ -79,7 +79,7 @@ export class ToolData implements ITool, IToolData {
 
   // method to push object into elements array in IData
   // i think simple getter thats good, IData handle it by self
-  get toolData(): ITool {
+  get elementData(): IElement {
     return {
       id: this.id,
       points: this.points,

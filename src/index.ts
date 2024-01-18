@@ -21,6 +21,11 @@ if (boardController.ctx) {
 
   mouseController.attach();
   touchController.attach();
+
+  // need single cache controller for all inputs
+  // now all input create it separately
+  // maybe it better to create cacheController in that file
+  // and use attach method
 }
 
 // for move use ctx.translate()
