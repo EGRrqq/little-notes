@@ -1,0 +1,1 @@
+:root{--main-font-size: calc(.75rem + max(1vw, 1vh)) }*,*:before,*:after{margin:0;border:0;padding:0;font-size:var(--main-font-size)}body{min-height:100dvh;overflow:hidden;white-space:nowrap;background-color:tan}canvas{position:absolute;cursor:crosshair}
