@@ -9,9 +9,6 @@ interface ITouchController {
 // multi touch support
 // work with touches array, not just a touches[0]
 // on each touch new Element creates
-
-// todo(for each controllers):
-// remove ITollsController dependency
 export class TouchController implements ITouchController {
   #canvasEl: HTMLCanvasElement;
   #toolsController: ITollsController;

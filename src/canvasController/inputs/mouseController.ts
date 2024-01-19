@@ -5,8 +5,6 @@ interface IMouseController {
   attach(): void;
 }
 
-// todo(for each controllers):
-// remove ITollsController dependency
 export class MouseController implements IMouseController {
   #canvasEl: HTMLCanvasElement;
   #toolsController: ITollsController;

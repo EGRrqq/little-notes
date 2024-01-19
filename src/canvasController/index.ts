@@ -9,6 +9,9 @@ export interface ICanvasController {
   clearCanvasData(): void;
 }
 
+// todo: move and zoom canvas
+// for move use ctx.translate()
+// for zoom use ctx.scale()
 export class CanvasController implements ICanvasController {
   #canvasEl: HTMLCanvasElement;
   #context: CanvasRenderingContext2D | null;

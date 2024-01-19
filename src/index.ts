@@ -28,23 +28,25 @@ if (boardController.ctx) {
   cacheController.mouseAttach();
   cacheController.touchAttach();
 
-  const redrawData = () => {
-    boardController.moveOriginPointTo(...cacheController.originPoint);
-    cacheController.iterateOverPoints();
-    boardController.resetOriginPoint();
-  };
+  // canvas setup
+  function iterateOverData() {
+    for (let element of cacheController.data.elements) {
+      boardController.moveOriginPointTo(element.x, element.y);
+      cacheController.iterateOverPoints(element.points);
+      boardController.resetOriginPoint();
+    }
+  }
 
-  window.addEventListener("resize", () => {
+  function canvasSetup() {
     boardController.setCanvasFullSize();
     boardController.clearCanvasData();
 
-    requestAnimationFrame(redrawData);
+    requestAnimationFrame(iterateOverData);
+  }
+
+  window.addEventListener("resize", canvasSetup);
+
+  window.addEventListener("load", canvasSetup, {
+    once: true,
   });
 }
-
-// for move use ctx.translate()
-// for zoom use ctx.scale()
-
-window.addEventListener("load", boardController.setCanvasFullSize, {
-  once: true,
-});

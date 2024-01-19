@@ -1,5 +1,5 @@
 import { ITollsController } from "../../tools";
-import { Data, ElementData } from "../Data";
+import { Data, ElementData, IElement } from "../Data";
 
 export interface ICacheController {
   originPoint: [number, number];
@@ -8,8 +8,6 @@ export interface ICacheController {
   touchAttach(): void;
 }
 
-// todo(for each controllers):
-// remove ITollsController dependency
 export class CacheController implements ICacheController {
   #captureFlag = false;
 
@@ -63,13 +61,13 @@ export class CacheController implements ICacheController {
     return [this.#cache.x, this.#cache.y];
   }
 
-  iterateOverPoints = () => {
-    for (let i = 0, length = this.#cache.points.length - 1; i < length; i++) {
-      let x0 = this.#cache.points[i][0];
-      let y0 = this.#cache.points[i][1];
+  iterateOverPoints = (points: IElement["points"]) => {
+    for (let i = 0, length = points.length - 1; i < length; i++) {
+      let x0 = points[i][0];
+      let y0 = points[i][1];
 
-      let x1 = this.#cache.points[i + 1][0];
-      let y1 = this.#cache.points[i + 1][1];
+      let x1 = points[i + 1][0];
+      let y1 = points[i + 1][1];
 
       this.#toolsController.activeTool.draw(x0, y0, x1, y1);
     }
@@ -79,7 +77,7 @@ export class CacheController implements ICacheController {
     return this.#storageDataKey;
   }
 
-  get #data() {
+  get data() {
     return this.#appData;
   }
 
@@ -91,6 +89,9 @@ export class CacheController implements ICacheController {
     this.#toolCache = data;
   }
 
+  // todo:
+  // accept tool stuff in settings obj
+  // like (x: number, y: number { type: string, lineWidth: number })
   #onPointerDown = (x: number, y: number) => {
     this.#captureFlag = true;
 
@@ -118,8 +119,8 @@ export class CacheController implements ICacheController {
   #onPointerUp = () => {
     this.#captureFlag = false;
 
-    this.#data.pushElement(this.#cache.elementData);
-    localStorage.setItem(this.#dataKey, JSON.stringify(this.#data.elements));
+    this.data.pushElement(this.#cache.elementData);
+    localStorage.setItem(this.#dataKey, JSON.stringify(this.data.elements));
 
     // set width/height
   };
