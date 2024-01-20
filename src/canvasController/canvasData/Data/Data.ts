@@ -1,6 +1,10 @@
 import { IData, IElement } from ".";
 
-export class Data implements IData {
+interface IAllData {
+  allData: IData;
+}
+
+export class Data implements IData, IAllData {
   #elements: IElement[] = [];
 
   get elements() {
@@ -13,5 +17,11 @@ export class Data implements IData {
 
   pushElement(element: IElement) {
     this.#elements.push(element);
+  }
+
+  get allData(): IData {
+    return {
+      elements: this.elements,
+    };
   }
 }
