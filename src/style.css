@@ -20,7 +20,6 @@
   font-size: var(--main-font-size);
 }
 
-
 body {
   min-height: 100dvh;
   overflow: hidden;
@@ -53,7 +52,7 @@ button:hover {
   z-index: 1;
 }
 
-.menu-dropdown {
+#menu-dropdown {
   display: grid;
 
   margin-top: calc(var(--content-padding) / 2);
