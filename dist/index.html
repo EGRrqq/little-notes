@@ -1,15 +1,28 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Little Notes</title>
-    <script type="module" crossorigin src="/little-notes/index-UnUIrd7J.js"></script>
-    <link rel="stylesheet" crossorigin href="/little-notes/index-OyNoxt7r.css">
-  </head>
 
-  <body>
-    <canvas id="board"></canvas>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Little Notes</title>
+  <script type="module" crossorigin src="/little-notes/index-ZVScJ8Tb.js"></script>
+  <link rel="stylesheet" crossorigin href="/little-notes/index-Qi3JwlRl.css">
+</head>
+
+<body>
+  <article class="menu">
+    <button class="menu__item--onTop" id="menu__toggle-btn">M</button>
+
+    <section class="menu__item--onTop menu-dropdown--isClosed" id="menu-dropdown" data-is-open="false" aria-hidden="true">
+      <button id="menu-dropdown__open">open</button>
+      <button id="menu-dropdown__save">save to</button>
+      <hr class="menu-dropdown__divider">
+      <button id="menu-dropdown__clear">clear canvas</button>
+    </section>
+  </article>
+
+  <canvas id="board"></canvas>
+</body>
+
 </html>
