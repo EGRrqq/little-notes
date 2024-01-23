@@ -1,20 +1,27 @@
 import { ITollsController } from "../../tools";
-import { Data, ElementData, IElement } from "../Data";
+import {
+  DataController,
+  ElementDataController,
+  IData,
+  IElement,
+} from "../Data";
 
 export interface ICacheController {
-  originPoint: [number, number];
+  appData: IData;
 
   mouseAttach(): void;
   touchAttach(): void;
+
+  iterateOverPoints: (points: IElement["points"]) => void;
 }
 
 export class CacheController implements ICacheController {
   #captureFlag = false;
 
-  #appData = new Data();
+  #appDataController = new DataController();
   #storageDataKey = "LittleNotes";
 
-  #toolCache = new ElementData();
+  #toolCache = new ElementDataController();
   #toolsController: ITollsController;
 
   constructor(toolsController: ITollsController) {
@@ -23,7 +30,7 @@ export class CacheController implements ICacheController {
     const storageData = localStorage.getItem(this.#storageDataKey);
 
     if (storageData) {
-      this.#appData.elements = JSON.parse(storageData);
+      this.#appDataController.elements = JSON.parse(storageData);
     }
   }
 
@@ -57,10 +64,6 @@ export class CacheController implements ICacheController {
     window.addEventListener("touchend", () => this.#onPointerUp());
   }
 
-  get originPoint(): [number, number] {
-    return [this.#cache.x, this.#cache.y];
-  }
-
   iterateOverPoints = (points: IElement["points"]) => {
     for (let i = 0, length = points.length - 1; i < length; i++) {
       let x0 = points[i][0];
@@ -73,19 +76,23 @@ export class CacheController implements ICacheController {
     }
   };
 
+  get appData(): IData {
+    return this.#appDataController.allData;
+  }
+
   get #dataKey() {
     return this.#storageDataKey;
   }
 
-  get data() {
-    return this.#appData;
+  get #dataController() {
+    return this.#appDataController;
   }
 
-  get #cache() {
+  get #cacheController() {
     return this.#toolCache;
   }
 
-  set #cache(data: ElementData) {
+  set #cacheController(data: ElementDataController) {
     this.#toolCache = data;
   }
 
@@ -95,32 +102,41 @@ export class CacheController implements ICacheController {
   #onPointerDown = (x: number, y: number) => {
     this.#captureFlag = true;
 
-    this.#cache = new ElementData();
+    this.#cacheController = new ElementDataController();
 
-    this.#cache.type = this.#toolsController.activeTool.type;
+    this.#cacheController.type = this.#toolsController.activeTool.type;
 
     // set up origin point
     // to calculate points from new origin point
-    this.#cache.x = x;
-    this.#cache.y = y;
+    this.#cacheController.x = x;
+    this.#cacheController.y = y;
 
     // first coord, basically onMouseDown coord
-    this.#cache.point = [0, 0];
-    this.#cache.lastPoint = [0, 0];
+    this.#cacheController.point = [0, 0];
+    this.#cacheController.lastPoint = [0, 0];
   };
 
   #onPointerMove = (x: number, y: number) => {
     if (this.#captureFlag) {
-      this.#cache.point = [x - this.#cache.x, y - this.#cache.y];
-      this.#cache.lastPoint = [x - this.#cache.x, y - this.#cache.y];
+      this.#cacheController.point = [
+        x - this.#cacheController.x,
+        y - this.#cacheController.y,
+      ];
+      this.#cacheController.lastPoint = [
+        x - this.#cacheController.x,
+        y - this.#cacheController.y,
+      ];
     }
   };
 
   #onPointerUp = () => {
     this.#captureFlag = false;
 
-    this.data.pushElement(this.#cache.elementData);
-    localStorage.setItem(this.#dataKey, JSON.stringify(this.data.elements));
+    this.#dataController.pushElement(this.#cacheController.elementData);
+    localStorage.setItem(
+      this.#dataKey,
+      JSON.stringify(this.#dataController.elements)
+    );
 
     // set width/height
   };

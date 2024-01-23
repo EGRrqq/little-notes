@@ -1,6 +1,6 @@
 import { IElement } from "./IElement";
 
-interface IElementData {
+interface IElementDataController {
   elementData: IElement;
 }
 
@@ -8,7 +8,7 @@ interface IElementData {
 // static method to remove object by id
 // like: ToolData.remove({id: "ryue25jfeoirieogh"});
 // static remove(id: string): void {}
-export class ElementData implements IElement, IElementData {
+export class ElementDataController implements IElement, IElementDataController {
   #id: string = "";
   #points: [number, number][] = [];
   #type: string = "";

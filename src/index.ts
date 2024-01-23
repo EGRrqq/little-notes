@@ -40,7 +40,7 @@ if (boardController.ctx) {
 
   // canvas setup
   function iterateOverData() {
-    for (let element of cacheController.data.elements) {
+    for (let element of cacheController.appData.elements) {
       boardController.moveOriginPointTo(element.x, element.y);
       cacheController.iterateOverPoints(element.points);
       boardController.resetOriginPoint();
@@ -69,7 +69,7 @@ if (boardController.ctx) {
       const curDate = formatDate(new Date());
 
       saveData(
-        cacheController.data.allData,
+        cacheController.appData,
         `untitled_${curDate}.json`,
         "application/json"
       );

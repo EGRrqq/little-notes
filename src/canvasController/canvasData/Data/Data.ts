@@ -1,10 +1,12 @@
 import { IData, IElement } from ".";
 
-interface IAllData {
+interface IDataController {
   allData: IData;
+
+  pushElement: (element: IElement) => void;
 }
 
-export class Data implements IData, IAllData {
+export class DataController implements IData, IDataController {
   #elements: IElement[] = [];
 
   get elements() {
