@@ -19,7 +19,6 @@ export const loadData: TLoadData = (callback, contentType) => {
 
 function inputOnChange(e: Event, callback: TCallback) {
   const inputFile = (e.target as HTMLInputElement).files?.[0];
-
   if (inputFile) {
     const fileReader = new FileReader();
 

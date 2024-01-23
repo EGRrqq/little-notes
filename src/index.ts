@@ -4,7 +4,14 @@ import { CanvasController } from "./canvasController";
 import { MouseController, TouchController } from "./canvasController/inputs";
 import { Pen, ToolsController } from "./canvasController/tools";
 import { CacheController } from "./canvasController/canvasData/cache";
-import { dropdownController, switchBtnController } from "./uiController";
+import {
+  dropdownController,
+  openBtnController,
+  saveBtnController,
+  switchBtnController,
+} from "./uiController";
+import { loadData, saveData } from "./canvasController/canvasData/manipulate";
+import { formatDate } from "./canvasController/helpers";
 
 const board = document.getElementById("board") as HTMLCanvasElement;
 const boardController = new CanvasController(board);
@@ -48,11 +55,31 @@ if (boardController.ctx) {
   }
 
   // ui setup
+
+  // todo fix:
+  // when click on ui btn
+  // canvas think that u are click on them
   function uiSetup() {
     switchBtnController.onClick(() => {
       dropdownController.toggleIsOpen();
       dropdownController.toggleClass(toggleClass);
     });
+
+    saveBtnController.onClick(() => {
+      const curDate = formatDate(new Date());
+
+      saveData(
+        cacheController.data.allData,
+        `untitled_${curDate}.json`,
+        "application/json"
+      );
+    });
+
+    openBtnController.onClick(() =>
+      loadData((data) => {
+        console.log(data);
+      }, "application/json")
+    );
   }
 
   window.addEventListener("resize", canvasSetup);
