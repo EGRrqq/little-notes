@@ -13,6 +13,9 @@ export interface ICacheController {
   touchAttach(): void;
 
   iterateOverPoints: (points: IElement["points"]) => void;
+
+  storeDataElement: (element: IElement) => void;
+  clearDataElements: () => void;
 }
 
 export class CacheController implements ICacheController {
@@ -27,11 +30,7 @@ export class CacheController implements ICacheController {
   constructor(toolsController: ITollsController) {
     this.#toolsController = toolsController;
 
-    const storageData = localStorage.getItem(this.#storageDataKey);
-
-    if (storageData) {
-      this.#appDataController.elements = JSON.parse(storageData);
-    }
+    this.#restoreDataElements();
   }
 
   mouseAttach(): void {
@@ -78,6 +77,27 @@ export class CacheController implements ICacheController {
 
   get appData(): IData {
     return this.#appDataController.allData;
+  }
+
+  storeDataElement(element: IElement) {
+    this.#dataController.pushElement(element);
+    localStorage.setItem(
+      this.#dataKey,
+      JSON.stringify(this.#dataController.elements)
+    );
+  }
+
+  #restoreDataElements() {
+    const storageData = localStorage.getItem(this.#storageDataKey);
+
+    if (storageData) {
+      this.#appDataController.elements = JSON.parse(storageData);
+    }
+  }
+
+  clearDataElements() {
+    this.#dataController.elements = [];
+    localStorage.removeItem(this.#dataKey);
   }
 
   get #dataKey() {
@@ -132,11 +152,7 @@ export class CacheController implements ICacheController {
   #onPointerUp = () => {
     this.#captureFlag = false;
 
-    this.#dataController.pushElement(this.#cacheController.elementData);
-    localStorage.setItem(
-      this.#dataKey,
-      JSON.stringify(this.#dataController.elements)
-    );
+    this.storeDataElement(this.#cacheController.elementData);
 
     // set width/height
   };

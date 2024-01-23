@@ -13,6 +13,10 @@ const saveBtn = document.getElementById(
   "menu-dropdown__save"
 ) as HTMLButtonElement;
 
+const clearBtn = document.getElementById(
+  "menu-dropdown__clear"
+) as HTMLButtonElement;
+
 const dropdown = document.getElementById("menu-dropdown") as HTMLElement;
 
 export const switchBtnController = new UiBtnController(switchBtn);
@@ -20,3 +24,4 @@ export const switchBtnController = new UiBtnController(switchBtn);
 export const dropdownController = new DropdownController(dropdown);
 export const openBtnController = new UiBtnController(openBtn);
 export const saveBtnController = new UiBtnController(saveBtn);
+export const clearBtnController = new UiBtnController(clearBtn);

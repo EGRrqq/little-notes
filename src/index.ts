@@ -5,6 +5,7 @@ import { MouseController, TouchController } from "./canvasController/inputs";
 import { Pen, ToolsController } from "./canvasController/tools";
 import { CacheController } from "./canvasController/canvasData/cache";
 import {
+  clearBtnController,
   dropdownController,
   openBtnController,
   saveBtnController,
@@ -77,9 +78,21 @@ if (boardController.ctx) {
 
     openBtnController.onClick(() =>
       loadData((data) => {
-        console.log(data);
+        cacheController.clearDataElements();
+
+        for (let element of data.elements) {
+          cacheController.storeDataElement(element);
+        }
+
+        canvasSetup();
       }, "application/json")
     );
+
+    clearBtnController.onClick(() => {
+      cacheController.clearDataElements();
+
+      canvasSetup();
+    });
   }
 
   window.addEventListener("resize", canvasSetup);
