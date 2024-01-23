@@ -36,8 +36,8 @@ if (boardController.ctx) {
   // cache setup
   const cacheController = new CacheController(toolsController);
 
-  cacheController.mouseAttach();
-  cacheController.touchAttach();
+  cacheController.mouseAttach(board);
+  cacheController.touchAttach(board);
 
   // canvas setup
   function iterateOverData() {
@@ -56,10 +56,6 @@ if (boardController.ctx) {
   }
 
   // ui setup
-
-  // todo fix:
-  // when click on ui btn
-  // canvas think that u are click on them
   function uiSetup() {
     switchBtnController.onClick(() => {
       dropdownController.toggleIsOpen();

@@ -9,8 +9,8 @@ import {
 export interface ICacheController {
   appData: IData;
 
-  mouseAttach(): void;
-  touchAttach(): void;
+  mouseAttach(canvasEl: HTMLCanvasElement): void;
+  touchAttach(canvasEl: HTMLCanvasElement): void;
 
   iterateOverPoints: (points: IElement["points"]) => void;
 
@@ -33,34 +33,34 @@ export class CacheController implements ICacheController {
     this.#restoreDataElements();
   }
 
-  mouseAttach(): void {
-    window.addEventListener("mousedown", (e: MouseEvent) =>
+  mouseAttach(canvasEl: HTMLCanvasElement): void {
+    canvasEl.addEventListener("mousedown", (e: MouseEvent) =>
       this.#onPointerDown(e.clientX, e.clientY)
     );
 
-    window.addEventListener("mousemove", (e: MouseEvent) =>
+    canvasEl.addEventListener("mousemove", (e: MouseEvent) =>
       this.#onPointerMove(e.clientX, e.clientY)
     );
 
-    window.addEventListener("mouseup", () => this.#onPointerUp());
+    canvasEl.addEventListener("mouseup", () => this.#onPointerUp());
   }
 
-  touchAttach(): void {
-    window.addEventListener("touchstart", (e: TouchEvent) =>
+  touchAttach(canvasEl: HTMLCanvasElement): void {
+    canvasEl.addEventListener("touchstart", (e: TouchEvent) =>
       this.#onPointerDown(
         Math.round(e.touches[0].clientX),
         Math.round(e.touches[0].clientY)
       )
     );
 
-    window.addEventListener("touchmove", (e: TouchEvent) =>
+    canvasEl.addEventListener("touchmove", (e: TouchEvent) =>
       this.#onPointerMove(
         Math.round(e.touches[0].clientX),
         Math.round(e.touches[0].clientY)
       )
     );
 
-    window.addEventListener("touchend", () => this.#onPointerUp());
+    canvasEl.addEventListener("touchend", () => this.#onPointerUp());
   }
 
   iterateOverPoints = (points: IElement["points"]) => {
