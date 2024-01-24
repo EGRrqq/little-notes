@@ -19,6 +19,7 @@ export class CanvasController implements ICanvasController {
   constructor(board: HTMLCanvasElement) {
     this.#canvasEl = board;
 
+    // alpha: true
     this.#context = this.canvas.getContext("2d");
   }
 
@@ -33,6 +34,22 @@ export class CanvasController implements ICanvasController {
   setCanvasFullSize = () => {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+  };
+
+  setProperFullSize = () => {
+    // Get the DPR and size of the canvas
+    const dpr = window.devicePixelRatio;
+
+    // Set the "actual" size of the canvas
+    this.canvas.width = window.innerWidth * dpr;
+    this.canvas.height = window.innerHeight * dpr;
+
+    // Scale the context to ensure correct drawing operations
+    this.ctx?.scale(dpr, dpr);
+
+    // Set the "drawn" size of the canvas
+    this.canvas.style.width = `${window.innerWidth}px`;
+    this.canvas.style.height = `${window.innerHeight}px`;
   };
 
   clearCanvasData = () => {

@@ -45,11 +45,17 @@ if (boardController.ctx) {
       boardController.moveOriginPointTo(element.x, element.y);
       cacheController.iterateOverPoints(element.points);
       boardController.resetOriginPoint();
+
+      boardController.ctx?.scale(
+        window.devicePixelRatio,
+        window.devicePixelRatio
+      );
     }
   }
 
   function canvasSetup() {
-    boardController.setCanvasFullSize();
+    // boardController.setCanvasFullSize();
+    boardController.setProperFullSize();
     boardController.clearCanvasData();
 
     requestAnimationFrame(iterateOverData);
