@@ -1,6 +1,6 @@
 import { ITollsController } from "../../tools";
 import {
-  DataController,
+  AppDataController,
   ElementDataController,
   IData,
   IElement,
@@ -21,7 +21,7 @@ export interface ICacheController {
 export class CacheController implements ICacheController {
   #captureFlag = false;
 
-  #appDataController = new DataController();
+  #appDataController = new AppDataController();
   #storageDataKey = "LittleNotes";
 
   #toolCache = new ElementDataController();

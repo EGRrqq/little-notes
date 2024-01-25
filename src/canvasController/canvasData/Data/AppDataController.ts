@@ -6,7 +6,7 @@ interface IDataController {
   pushElement: (element: IElement) => void;
 }
 
-export class DataController implements IData, IDataController {
+export class AppDataController implements IData, IDataController {
   #elements: IElement[] = [];
 
   get elements() {
