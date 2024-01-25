@@ -3,9 +3,13 @@ export interface ICanvasController {
   ctx: CanvasRenderingContext2D | null;
 
   moveOriginPointTo(x: number, y: number): void;
-  resetOriginPoint(): void;
+  resetOriginPoint(windowDpr: number): void;
 
-  setCanvasFullSize(): void;
+  setCanvasFullSize(
+    windowWidth: number,
+    windowHeight: number,
+    windowDpr: number
+  ): void;
   clearCanvasData(): void;
 }
 
@@ -31,21 +35,17 @@ export class CanvasController implements ICanvasController {
     return this.#context;
   }
 
-  setCanvasFullSize = () => {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-  };
-
-  setProperFullSize = () => {
-    // Get the DPR and size of the canvas
-    const dpr = window.devicePixelRatio;
-
+  setCanvasFullSize = (
+    windowWidth: number,
+    windowHeight: number,
+    windowDpr: number
+  ) => {
     // Set the "actual" size of the canvas
-    this.canvas.width = window.innerWidth * dpr;
-    this.canvas.height = window.innerHeight * dpr;
+    this.canvas.width = windowWidth * windowDpr;
+    this.canvas.height = windowHeight * windowDpr;
 
     // Scale the context to ensure correct drawing operations
-    this.ctx?.scale(dpr, dpr);
+    this.ctx?.scale(windowDpr, windowDpr);
 
     // Set the "drawn" size of the canvas
     this.canvas.style.width = `${window.innerWidth}px`;
@@ -60,7 +60,8 @@ export class CanvasController implements ICanvasController {
     this.ctx?.translate(x, y);
   };
 
-  resetOriginPoint = () => {
-    this.ctx?.setTransform(1, 0, 0, 1, 0, 0);
+  resetOriginPoint = (windowDpr: number) => {
+    // reset to init scale
+    this.ctx?.setTransform(windowDpr, 0, 0, windowDpr, 0, 0);
   };
 }

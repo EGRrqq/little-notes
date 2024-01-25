@@ -13,9 +13,11 @@ import {
 } from "./uiController";
 import { loadData, saveData } from "./canvasController/canvasData/manipulate";
 import { formatDate } from "./canvasController/helpers";
+import { WindowData } from "./canvasController/windowData/windowDataController";
 
 const board = document.getElementById("board") as HTMLCanvasElement;
 const boardController = new CanvasController(board);
+const windowData = new WindowData();
 
 const toggleClass = "menu-dropdown--isClosed";
 
@@ -44,18 +46,16 @@ if (boardController.ctx) {
     for (let element of cacheController.appData.elements) {
       boardController.moveOriginPointTo(element.x, element.y);
       cacheController.iterateOverPoints(element.points);
-      boardController.resetOriginPoint();
-
-      boardController.ctx?.scale(
-        window.devicePixelRatio,
-        window.devicePixelRatio
-      );
+      boardController.resetOriginPoint(windowData.dpr);
     }
   }
 
   function canvasSetup() {
-    // boardController.setCanvasFullSize();
-    boardController.setProperFullSize();
+    boardController.setCanvasFullSize(
+      windowData.innerWidth,
+      windowData.innerHeight,
+      windowData.dpr
+    );
     boardController.clearCanvasData();
 
     requestAnimationFrame(iterateOverData);
