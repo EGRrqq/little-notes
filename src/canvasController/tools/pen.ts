@@ -19,7 +19,11 @@ export class Pen implements ITool {
     return this.#type;
   }
 
+  // todo: move settings into separate func
+  // tools controller should have an ability to change current tool settings
   draw(x0: number, y0: number, x1: number, y1: number) {
+    this.#ctx.strokeStyle = "#fff";
+
     this.#ctx.beginPath();
     this.#ctx.moveTo(x0, y0);
     this.#ctx.lineTo(x1, y1);

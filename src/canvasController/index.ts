@@ -19,12 +19,12 @@ export interface ICanvasController {
 export class CanvasController implements ICanvasController {
   #canvasEl: HTMLCanvasElement;
   #context: CanvasRenderingContext2D | null;
+  #canvasSettings: CanvasRenderingContext2DSettings = { alpha: false };
 
   constructor(board: HTMLCanvasElement) {
     this.#canvasEl = board;
 
-    // alpha: true
-    this.#context = this.canvas.getContext("2d");
+    this.#context = this.canvas.getContext("2d", this.#canvasSettings);
   }
 
   get canvas(): HTMLCanvasElement {
