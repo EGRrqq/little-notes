@@ -1,15 +1,15 @@
-import { ITool } from "./ITool";
+import { IStrokeTool } from "./IStrokeTool";
 
 export interface ITollsController {
-  tools: Record<ITool["type"], ITool>;
-  activeTool: ITool;
+  tools: Record<IStrokeTool["type"], IStrokeTool>;
+  activeTool: IStrokeTool;
 }
 
 export class ToolsController implements ITollsController {
-  #tools: Record<ITool["type"], ITool>;
-  #activeTool: ITool;
+  #tools: Record<IStrokeTool["type"], IStrokeTool>;
+  #activeTool: IStrokeTool;
 
-  constructor(toolList: ITool[], defaultToolType = "pen") {
+  constructor(toolList: IStrokeTool[], defaultToolType = "pen") {
     this.#tools = {};
 
     for (let tool of toolList) {
@@ -23,11 +23,11 @@ export class ToolsController implements ITollsController {
     return this.#tools;
   }
 
-  get activeTool(): ITool {
+  get activeTool(): IStrokeTool {
     return this.#activeTool;
   }
 
-  set activeTool(tool: ITool) {
+  set activeTool(tool: IStrokeTool) {
     this.#activeTool = tool;
   }
 }
