@@ -1,4 +1,4 @@
-import { ITollsController, ToolsController } from "../../tools";
+import { ITollsController } from "../../tools";
 import {
   AppDataController,
   ElementDataController,
