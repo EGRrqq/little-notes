@@ -28,6 +28,9 @@ export class MouseController implements IMouseController {
 
   #onMouseMove = (e: MouseEvent) => {
     if (pointerData.pressed) {
+      // pass
+      // this.#toolsController.activeTool.settings()
+
       this.#toolsController.activeTool.draw(
         ...pointerData.getPrevValues(),
         e.clientX,

@@ -1,3 +1,5 @@
+import { IStrokeSettings } from "../../tools";
+
 export interface IElement {
   id: string;
 
@@ -14,7 +16,7 @@ export interface IElement {
   points: [number, number][];
   lastPoint: [number, number];
 
-  // settings: IElementSettings;
+  settings: IStrokeSettings;
 
   // boundingRect help to set width and height values
   // width?: number;

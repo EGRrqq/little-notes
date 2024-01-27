@@ -24,7 +24,7 @@ export class CanvasController implements ICanvasController {
   constructor(board: HTMLCanvasElement) {
     this.#canvasEl = board;
 
-    this.#context = this.canvas.getContext("2d", this.#canvasSettings);
+    this.#context = this.canvas.getContext("2d");
   }
 
   get canvas(): HTMLCanvasElement {

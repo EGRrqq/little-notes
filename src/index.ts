@@ -38,14 +38,18 @@ if (boardController.ctx) {
   // cache setup
   const cacheController = new CacheController(toolsController);
 
-  cacheController.mouseAttach(board);
-  cacheController.touchAttach(board);
+  cacheController.mouseAttach(boardController.ctx);
+  cacheController.touchAttach(boardController.ctx);
 
   // canvas setup
   function iterateOverData() {
     for (let element of cacheController.appData.elements) {
       boardController.moveOriginPointTo(element.x, element.y);
-      cacheController.iterateOverPoints(element.points);
+      cacheController.iterateOverPoints(
+        element.points,
+        toolsController.activeTool.draw,
+        element.settings
+      );
       boardController.resetOriginPoint(windowData.dpr);
     }
   }
