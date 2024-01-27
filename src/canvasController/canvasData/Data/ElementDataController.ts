@@ -2,13 +2,19 @@ import { IElement } from "./IElement";
 
 interface IElementDataController {
   elementData: IElement;
+
+  onPointerDown: (x: number, y: number, type: string) => void;
+  onPointerMove: (x: number, y: number) => void;
+  onPointerUp: () => void;
 }
 
 // todo:
 // static method to remove object by id
 // like: ToolData.remove({id: "ryue25jfeoirieogh"});
 // static remove(id: string): void {}
-export class ElementDataController implements IElement, IElementDataController {
+export class ElementDataController implements IElementDataController {
+  #captureFlag = false;
+
   #id: string = "";
   #points: [number, number][] = [];
   #type: string = "";
@@ -20,9 +26,47 @@ export class ElementDataController implements IElement, IElementDataController {
     this.#generateId(3);
   }
 
-  // id + type
-  get id() {
-    return this.#id;
+  get elementData(): IElement {
+    return {
+      id: this.#id,
+      points: this.#points,
+      type: this.#type,
+      x: this.#x,
+      y: this.#y,
+      lastPoint: this.#lastPoint,
+    };
+  }
+
+  onPointerDown = (x: number, y: number, type: string) => {
+    this.#captureFlag = true;
+
+    this.#type = type;
+
+    // set up origin point
+    // to calculate points from new origin point
+    this.#x = x;
+    this.#y = y;
+
+    // first coord, basically onMouseDown coord
+    this.#point = [0, 0];
+    this.#lastPoint = [0, 0];
+  };
+
+  onPointerMove = (x: number, y: number) => {
+    if (this.#captureFlag) {
+      this.#point = [x - this.#x, y - this.#y];
+      this.#lastPoint = [x - this.#x, y - this.#y];
+    }
+  };
+
+  onPointerUp = () => {
+    this.#captureFlag = false;
+
+    // set width/height
+  };
+
+  set #point(pointArr: [number, number]) {
+    this.#points.push(pointArr);
   }
 
   #generateId(times = 1): void {
@@ -33,58 +77,5 @@ export class ElementDataController implements IElement, IElementDataController {
 
       i++;
     }
-  }
-
-  get type() {
-    return this.#type;
-  }
-
-  set type(toolType: string) {
-    this.#type = toolType;
-  }
-
-  // origin point
-  get x(): number {
-    return this.#x;
-  }
-
-  set x(xInitPos: number) {
-    this.#x = xInitPos;
-  }
-
-  get y(): number {
-    return this.#y;
-  }
-
-  set y(yInitPos: number) {
-    this.#y = yInitPos;
-  }
-
-  // points
-  get points() {
-    return this.#points;
-  }
-
-  set point(pointArr: [number, number]) {
-    this.#points.push(pointArr);
-  }
-
-  get lastPoint() {
-    return this.#lastPoint;
-  }
-
-  set lastPoint(pointArr: [number, number]) {
-    this.#lastPoint = pointArr;
-  }
-
-  get elementData(): IElement {
-    return {
-      id: this.id,
-      points: this.points,
-      type: this.type,
-      x: this.x,
-      y: this.y,
-      lastPoint: this.lastPoint,
-    };
   }
 }

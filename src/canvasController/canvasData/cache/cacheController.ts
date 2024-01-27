@@ -1,4 +1,4 @@
-import { ITollsController } from "../../tools";
+import { ITollsController, ToolsController } from "../../tools";
 import {
   AppDataController,
   ElementDataController,
@@ -19,12 +19,10 @@ export interface ICacheController {
 }
 
 export class CacheController implements ICacheController {
-  #captureFlag = false;
-
+  #elementDataController = new ElementDataController();
   #appDataController = new AppDataController();
   #storageDataKey = "LittleNotes";
 
-  #toolCache = new ElementDataController();
   #toolsController: ITollsController;
 
   constructor(toolsController: ITollsController) {
@@ -34,33 +32,50 @@ export class CacheController implements ICacheController {
   }
 
   mouseAttach(canvasEl: HTMLCanvasElement): void {
-    canvasEl.addEventListener("mousedown", (e: MouseEvent) =>
-      this.#onPointerDown(e.clientX, e.clientY)
-    );
+    canvasEl.addEventListener("mousedown", (e: MouseEvent) => {
+      this.#elementDataController = new ElementDataController();
+
+      this.#elementDataController.onPointerDown(
+        e.clientX,
+        e.clientY,
+        this.#toolsController.activeTool.type
+      );
+    });
 
     canvasEl.addEventListener("mousemove", (e: MouseEvent) =>
-      this.#onPointerMove(e.clientX, e.clientY)
+      this.#elementDataController.onPointerMove(e.clientX, e.clientY)
     );
 
-    canvasEl.addEventListener("mouseup", () => this.#onPointerUp());
+    canvasEl.addEventListener("mouseup", () => {
+      this.#elementDataController.onPointerUp();
+
+      this.storeDataElement(this.#elementDataController.elementData);
+    });
   }
 
   touchAttach(canvasEl: HTMLCanvasElement): void {
-    canvasEl.addEventListener("touchstart", (e: TouchEvent) =>
-      this.#onPointerDown(
+    canvasEl.addEventListener("touchstart", (e: TouchEvent) => {
+      this.#elementDataController = new ElementDataController();
+
+      this.#elementDataController.onPointerDown(
         Math.round(e.touches[0].clientX),
-        Math.round(e.touches[0].clientY)
-      )
-    );
+        Math.round(e.touches[0].clientY),
+        this.#toolsController.activeTool.type
+      );
+    });
 
     canvasEl.addEventListener("touchmove", (e: TouchEvent) =>
-      this.#onPointerMove(
+      this.#elementDataController.onPointerMove(
         Math.round(e.touches[0].clientX),
         Math.round(e.touches[0].clientY)
       )
     );
 
-    canvasEl.addEventListener("touchend", () => this.#onPointerUp());
+    canvasEl.addEventListener("touchend", () => {
+      this.#elementDataController.onPointerUp();
+
+      this.storeDataElement(this.#elementDataController.elementData);
+    });
   }
 
   iterateOverPoints = (points: IElement["points"]) => {
@@ -87,17 +102,17 @@ export class CacheController implements ICacheController {
     );
   }
 
+  clearDataElements() {
+    this.#dataController.elements = [];
+    localStorage.removeItem(this.#dataKey);
+  }
+
   #restoreDataElements() {
     const storageData = localStorage.getItem(this.#storageDataKey);
 
     if (storageData) {
       this.#appDataController.elements = JSON.parse(storageData);
     }
-  }
-
-  clearDataElements() {
-    this.#dataController.elements = [];
-    localStorage.removeItem(this.#dataKey);
   }
 
   get #dataKey() {
@@ -107,53 +122,4 @@ export class CacheController implements ICacheController {
   get #dataController() {
     return this.#appDataController;
   }
-
-  get #cacheController() {
-    return this.#toolCache;
-  }
-
-  set #cacheController(data: ElementDataController) {
-    this.#toolCache = data;
-  }
-
-  // todo:
-  // accept tool stuff in settings obj
-  // like (x: number, y: number { type: string, lineWidth: number })
-  #onPointerDown = (x: number, y: number) => {
-    this.#captureFlag = true;
-
-    this.#cacheController = new ElementDataController();
-
-    this.#cacheController.type = this.#toolsController.activeTool.type;
-
-    // set up origin point
-    // to calculate points from new origin point
-    this.#cacheController.x = x;
-    this.#cacheController.y = y;
-
-    // first coord, basically onMouseDown coord
-    this.#cacheController.point = [0, 0];
-    this.#cacheController.lastPoint = [0, 0];
-  };
-
-  #onPointerMove = (x: number, y: number) => {
-    if (this.#captureFlag) {
-      this.#cacheController.point = [
-        x - this.#cacheController.x,
-        y - this.#cacheController.y,
-      ];
-      this.#cacheController.lastPoint = [
-        x - this.#cacheController.x,
-        y - this.#cacheController.y,
-      ];
-    }
-  };
-
-  #onPointerUp = () => {
-    this.#captureFlag = false;
-
-    this.storeDataElement(this.#cacheController.elementData);
-
-    // set width/height
-  };
 }
