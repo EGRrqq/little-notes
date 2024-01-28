@@ -9,14 +9,41 @@
 </head>
 
 <body>
+  <!-- good opportunity to practice web components -->
   <article class="menu">
     <button class="menu__item--onTop" id="menu__toggle-btn">M</button>
 
-    <section class="menu__item--onTop menu-dropdown--isClosed" id="menu-dropdown" data-is-open="false" aria-hidden="true">
+    <section class="menu__item--onTop menu-dropdown--isClosed" id="menu-dropdown" data-is-open="false"
+      aria-hidden="true">
       <button id="menu-dropdown__open">open</button>
       <button id="menu-dropdown__save">save to</button>
       <hr class="menu-dropdown__divider">
       <button id="menu-dropdown__clear">clear canvas</button>
+    </section>
+  </article>
+
+  <article class="tool-settings">
+    <section class="tool-settings__item--onTop" id="tool-settings-dropdown">
+      <input type="color">
+      <input type="range">
+
+      <div>
+        <label for="line-cap">line cap:</label>
+        <select name="line-cap" id="line-cap">
+          <option value="butt">Butt</option>
+          <option value="round">Round</option>
+          <option value="square">Square</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="line-join">line join:</label>
+        <select name="line-join" id="line-join">
+          <option value="bevel">Bevel</option>
+          <option value="miter">Miter</option>
+          <option value="round">Round</option>
+        </select>
+      </div>
     </section>
   </article>
 
