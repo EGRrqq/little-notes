@@ -1,6 +1,7 @@
+import { IStrokeSettings } from "../../tools/IStrokeTool";
 import { IElement } from "./IElement";
 
-interface IElementDataController {
+export interface IElementDataController {
   elementData: IElement;
 
   onPointerDown: (x: number, y: number, type: string) => void;
@@ -13,6 +14,7 @@ interface IElementDataController {
 // like: ToolData.remove({id: "ryue25jfeoirieogh"});
 // static remove(id: string): void {}
 export class ElementDataController implements IElementDataController {
+  #ctx: CanvasRenderingContext2D;
   #captureFlag = false;
 
   #id: string = "";
@@ -21,8 +23,12 @@ export class ElementDataController implements IElementDataController {
   #x: number = 0;
   #y: number = 0;
   #lastPoint: [number, number] = [0, 0];
+  #settings: IStrokeSettings;
 
-  constructor() {
+  constructor(ctx: CanvasRenderingContext2D, settings: IStrokeSettings) {
+    this.#ctx = ctx;
+    this.#settings = settings;
+
     this.#generateId(3);
   }
 
@@ -34,6 +40,7 @@ export class ElementDataController implements IElementDataController {
       x: this.#x,
       y: this.#y,
       lastPoint: this.#lastPoint,
+      settings: this.#settings,
     };
   }
 
@@ -61,6 +68,7 @@ export class ElementDataController implements IElementDataController {
 
   onPointerUp = () => {
     this.#captureFlag = false;
+    this.#assignSettings(this.#settings);
 
     // set width/height
   };
@@ -76,6 +84,13 @@ export class ElementDataController implements IElementDataController {
       this.#id += Math.random().toString(36).substring(2);
 
       i++;
+    }
+  }
+
+  #assignSettings(settings: IStrokeSettings) {
+    for (let prop in settings) {
+      //@ts-ignore
+      settings[prop] = this.#ctx[prop];
     }
   }
 }

@@ -5,35 +5,53 @@ import {
   IData,
   IElement,
 } from "../Data";
+import { IElementDataController } from "../Data/ElementDataController";
 
 export interface ICacheController {
   appData: IData;
 
-  mouseAttach(canvasEl: HTMLCanvasElement): void;
-  touchAttach(canvasEl: HTMLCanvasElement): void;
+  mouseAttach(ctx: CanvasRenderingContext2D): void;
+  touchAttach(ctx: CanvasRenderingContext2D): void;
 
-  iterateOverPoints: (points: IElement["points"]) => void;
+  iterateOverPoints: (
+    points: IElement["points"],
+    settings: IElement["settings"]
+  ) => void;
 
   storeDataElement: (element: IElement) => void;
   clearDataElements: () => void;
 }
 
 export class CacheController implements ICacheController {
-  #elementDataController = new ElementDataController();
+  #elementDataController: IElementDataController;
   #appDataController = new AppDataController();
   #storageDataKey = "LittleNotes";
 
   #toolsController: ITollsController;
+  #ctx: CanvasRenderingContext2D;
 
-  constructor(toolsController: ITollsController) {
+  constructor(
+    ctx: CanvasRenderingContext2D,
+    toolsController: ITollsController
+  ) {
+    this.#ctx = ctx;
     this.#toolsController = toolsController;
 
+    this.#elementDataController = new ElementDataController(
+      ctx,
+      toolsController.activeTool.settings
+    );
+
+    // also need to restore last element settings
     this.#restoreDataElements();
   }
 
-  mouseAttach(canvasEl: HTMLCanvasElement): void {
-    canvasEl.addEventListener("mousedown", (e: MouseEvent) => {
-      this.#elementDataController = new ElementDataController();
+  mouseAttach(): void {
+    this.#ctx.canvas.addEventListener("mousedown", (e: MouseEvent) => {
+      this.#elementDataController = new ElementDataController(
+        this.#ctx,
+        this.#toolsController.activeTool.settings
+      );
 
       this.#elementDataController.onPointerDown(
         e.clientX,
@@ -42,20 +60,23 @@ export class CacheController implements ICacheController {
       );
     });
 
-    canvasEl.addEventListener("mousemove", (e: MouseEvent) =>
+    this.#ctx.canvas.addEventListener("mousemove", (e: MouseEvent) =>
       this.#elementDataController.onPointerMove(e.clientX, e.clientY)
     );
 
-    canvasEl.addEventListener("mouseup", () => {
+    this.#ctx.canvas.addEventListener("mouseup", () => {
       this.#elementDataController.onPointerUp();
 
       this.storeDataElement(this.#elementDataController.elementData);
     });
   }
 
-  touchAttach(canvasEl: HTMLCanvasElement): void {
-    canvasEl.addEventListener("touchstart", (e: TouchEvent) => {
-      this.#elementDataController = new ElementDataController();
+  touchAttach(): void {
+    this.#ctx.canvas.addEventListener("touchstart", (e: TouchEvent) => {
+      this.#elementDataController = new ElementDataController(
+        this.#ctx,
+        this.#toolsController.activeTool.settings
+      );
 
       this.#elementDataController.onPointerDown(
         Math.round(e.touches[0].clientX),
@@ -64,21 +85,24 @@ export class CacheController implements ICacheController {
       );
     });
 
-    canvasEl.addEventListener("touchmove", (e: TouchEvent) =>
+    this.#ctx.canvas.addEventListener("touchmove", (e: TouchEvent) =>
       this.#elementDataController.onPointerMove(
         Math.round(e.touches[0].clientX),
         Math.round(e.touches[0].clientY)
       )
     );
 
-    canvasEl.addEventListener("touchend", () => {
+    this.#ctx.canvas.addEventListener("touchend", () => {
       this.#elementDataController.onPointerUp();
 
       this.storeDataElement(this.#elementDataController.elementData);
     });
   }
 
-  iterateOverPoints = (points: IElement["points"]) => {
+  iterateOverPoints = (
+    points: IElement["points"],
+    settings: IElement["settings"]
+  ) => {
     for (let i = 0, length = points.length - 1; i < length; i++) {
       let x0 = points[i][0];
       let y0 = points[i][1];
@@ -86,7 +110,7 @@ export class CacheController implements ICacheController {
       let x1 = points[i + 1][0];
       let y1 = points[i + 1][1];
 
-      this.#toolsController.activeTool.draw(x0, y0, x1, y1);
+      this.#toolsController.activeTool.draw(x0, y0, x1, y1, settings);
     }
   };
 
