@@ -81,8 +81,8 @@ if (boardController.ctx) {
       );
     });
 
-    openBtnController.onClick(() =>
-      loadData((data) => {
+    openBtnController.onClick(() => {
+      loadData("application/json").then((data) => {
         cacheController.clearDataElements();
 
         for (let element of data.elements) {
@@ -90,8 +90,8 @@ if (boardController.ctx) {
         }
 
         canvasSetup();
-      }, "application/json")
-    );
+      });
+    });
 
     clearBtnController.onClick(() => {
       cacheController.clearDataElements();

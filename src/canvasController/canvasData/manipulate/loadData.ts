@@ -1,36 +1,37 @@
 import { IData } from "../Data";
 import { TContentType } from "./TContentType";
 
-type TLoadData = (callback: TCallback, contentType: TContentType) => void;
-type TCallback = (data: IData) => void;
+export function loadData(type: TContentType): Promise<IData> {
+  return new Promise((res, rej) => {
+    const input = createInput(type);
 
-export const loadData: TLoadData = (callback, contentType) => {
-  const input = document.createElement("input");
+    input.onchange = () => {
+      const file = input.files?.[0];
 
-  input.type = "file";
-  input.accept = contentType;
-  input.addEventListener("change", (e) => inputOnChange(e, callback), {
-    once: true,
+      if (file) readData(file).then(res).catch(rej);
+    };
+
+    input.click();
   });
-  input.click();
-
-  input.remove();
-};
-
-function inputOnChange(e: Event, callback: TCallback) {
-  const inputFile = (e.target as HTMLInputElement).files?.[0];
-  if (inputFile) {
-    const fileReader = new FileReader();
-
-    fileReader.addEventListener("load", (e) => readerOnLoad(e, callback), {
-      once: true,
-    });
-    fileReader.readAsText(inputFile);
-  }
 }
 
-function readerOnLoad(e: Event, callback: TCallback) {
-  const data: IData = JSON.parse((e.target as FileReader).result as string);
+function readData(file: File): Promise<IData> {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
 
-  callback(data);
+    reader.onerror = rej;
+    reader.onload = () => {
+      const data = JSON.parse(reader.result as string);
+      res(data);
+    };
+    reader.readAsText(file);
+  });
+}
+
+function createInput(type: TContentType): HTMLInputElement {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = type;
+
+  return input;
 }
