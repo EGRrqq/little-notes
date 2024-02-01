@@ -82,15 +82,17 @@ if (boardController.ctx) {
     });
 
     openBtnController.onClick(() => {
-      loadData("application/json").then((data) => {
-        cacheController.clearDataElements();
+      loadData("application/json")
+        .then((data) => {
+          cacheController.clearDataElements();
 
-        for (let element of data.elements) {
-          cacheController.storeDataElement(element);
-        }
+          for (let element of data.elements) {
+            cacheController.storeDataElement(element);
+          }
 
-        canvasSetup();
-      });
+          canvasSetup();
+        })
+        .catch((err) => console.error("onLoad:", err));
     });
 
     clearBtnController.onClick(() => {
