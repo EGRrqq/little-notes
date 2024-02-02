@@ -69,6 +69,7 @@ if (boardController.ctx) {
     switchBtnController.onClick(() => {
       dropdownController.toggleIsOpen();
       dropdownController.toggleClass(toggleClass);
+      dropdownController.toggleAriaHidden();
     });
 
     saveBtnController.onClick(() => {

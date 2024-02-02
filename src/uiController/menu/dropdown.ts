@@ -1,6 +1,7 @@
 interface IDropdown {
   toggleIsOpen: () => void;
   toggleClass: (cssClass: string) => void;
+  toggleAriaHidden: () => void;
 }
 
 export class DropdownController implements IDropdown {
@@ -36,6 +37,19 @@ export class DropdownController implements IDropdown {
         break;
       case "false":
         this.#dropdownEl.classList.add(cssClass);
+        break;
+      default:
+        break;
+    }
+  }
+
+  toggleAriaHidden() {
+    switch (this.#isOpen) {
+      case "true":
+        this.#dropdownEl.ariaHidden = "false";
+        break;
+      case "false":
+        this.#dropdownEl.ariaHidden = "true";
         break;
       default:
         break;
