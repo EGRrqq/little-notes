@@ -45,7 +45,7 @@ button:hover {
   bottom: 0;
 }
 
-#tool-settings-dropdown {
+.dropdown__section-wrapper {
   display: grid;
   gap: 1rem;
 
