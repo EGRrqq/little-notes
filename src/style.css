@@ -41,27 +41,8 @@ button:hover {
   box-shadow: inset 0 0 20px 20px rgba(0, 0, 0, 0.1);
 }
 
-.menu,
-.tool-settings {
-  position: absolute;
-
-  margin: var(--content-padding);
-}
-
-.tool-settings {
+#settings-dropdown {
   bottom: 0;
-}
-
-.menu__item--onTop,
-.tool-settings__item--onTop {
-  position: relative;
-  z-index: 1;
-}
-
-#menu-dropdown {
-  display: grid;
-
-  margin-top: calc(var(--content-padding) / 2);
 }
 
 #tool-settings-dropdown {
@@ -71,10 +52,6 @@ button:hover {
   background-color: white;
 }
 
-.menu-dropdown--isClosed {
-  display: none !important;
-}
-
-.menu-dropdown__divider {
+.menu__divider {
   border: solid;
 }

@@ -1,33 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Little Notes</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Little Notes</title>
-</head>
+  <body>
+    <canvas-dropdown isopen="false">
+      <span slot="dropdown__btn-text">M</span>
 
-<body>
-  <!-- good opportunity to practice web components -->
-  <article class="menu">
-    <button class="menu__item--onTop" id="menu__toggle-btn">M</button>
+      <button id="menu__open" slot="dropdown__section-el">open</button>
+      <button id="menu__save" slot="dropdown__section-el">save to</button>
+      <hr class="menu__divider" slot="dropdown__section-el" />
+      <button id="menu__clear" slot="dropdown__section-el">clear canvas</button>
+    </canvas-dropdown>
 
-    <section class="menu__item--onTop menu-dropdown--isClosed" id="menu-dropdown" data-is-open="false"
-      aria-hidden="true">
-      <button id="menu-dropdown__open">open</button>
-      <button id="menu-dropdown__save">save to</button>
-      <hr class="menu-dropdown__divider">
-      <button id="menu-dropdown__clear">clear canvas</button>
-    </section>
-  </article>
+    <canvas-dropdown id="settings-dropdown" isopen="false">
+      <span slot="dropdown__btn-text">S</span>
 
-  <article class="tool-settings">
-    <section class="tool-settings__item--onTop" id="tool-settings-dropdown">
-      <input type="color">
-      <input type="range">
+      <input slot="dropdown__section-el" type="color" />
+      <input slot="dropdown__section-el" type="range" />
 
-      <div>
+      <div slot="dropdown__section-el">
         <label for="line-cap">line cap:</label>
         <select name="line-cap" id="line-cap">
           <option value="butt">Butt</option>
@@ -36,7 +32,7 @@
         </select>
       </div>
 
-      <div>
+      <div slot="dropdown__section-el">
         <label for="line-join">line join:</label>
         <select name="line-join" id="line-join">
           <option value="bevel">Bevel</option>
@@ -44,11 +40,19 @@
           <option value="round">Round</option>
         </select>
       </div>
-    </section>
-  </article>
+    </canvas-dropdown>
 
-  <canvas id="board"></canvas>
-  <script type="module" src="/index.ts"></script>
-</body>
+    <template id="dropdown">
+      <button id="dropdown__btn">
+        <slot name="dropdown__btn-text">toggle btn</slot>
+      </button>
 
+      <section id="dropdown__section">
+        <slot name="dropdown__section-el"></slot>
+      </section>
+    </template>
+
+    <canvas id="board"></canvas>
+    <script type="module" src="/index.ts"></script>
+  </body>
 </html>

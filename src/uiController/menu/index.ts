@@ -1,1 +1,1 @@
-export { DropdownController } from "./dropdown";
+export { Dropdown } from "./Dropdown";

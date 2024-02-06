@@ -6,20 +6,17 @@ import { Pen, ToolsController } from "./canvasController/tools";
 import { CacheController } from "./canvasController/canvasData/cache";
 import {
   clearBtnController,
-  dropdownController,
   openBtnController,
   saveBtnController,
-  switchBtnController,
 } from "./uiController";
 import { loadData, saveData } from "./canvasController/canvasData/manipulate";
 import { formatDate } from "./canvasController/helpers";
 import { WindowData } from "./canvasController/windowData/windowDataController";
+import { Dropdown } from "./uiController/menu";
 
 const board = document.getElementById("board") as HTMLCanvasElement;
 const boardController = new CanvasController(board);
 const windowData = new WindowData();
-
-const toggleClass = "menu-dropdown--isClosed";
 
 if (boardController.ctx) {
   // available tools
@@ -66,11 +63,7 @@ if (boardController.ctx) {
 
   // ui setup
   function uiSetup() {
-    switchBtnController.onClick(() => {
-      dropdownController.toggleIsOpen();
-      dropdownController.toggleClass(toggleClass);
-      dropdownController.toggleAriaHidden();
-    });
+    customElements.define("canvas-dropdown", Dropdown);
 
     saveBtnController.onClick(() => {
       const curDate = formatDate(new Date());
