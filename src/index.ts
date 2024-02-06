@@ -5,6 +5,7 @@ import { MouseController, TouchController } from "./canvasController/inputs";
 import { Pen, ToolsController } from "./canvasController/tools";
 import { CacheController } from "./canvasController/canvasData/cache";
 import {
+  Dropdown,
   clearBtnController,
   openBtnController,
   saveBtnController,
@@ -12,7 +13,6 @@ import {
 import { loadData, saveData } from "./canvasController/canvasData/manipulate";
 import { formatDate } from "./canvasController/helpers";
 import { WindowData } from "./canvasController/windowData/windowDataController";
-import { Dropdown } from "./uiController/menu";
 
 const board = document.getElementById("board") as HTMLCanvasElement;
 const boardController = new CanvasController(board);

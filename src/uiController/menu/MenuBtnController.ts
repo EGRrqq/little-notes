@@ -2,7 +2,7 @@ interface IUiBtnController {
   onClick(callback: () => void): void;
 }
 
-export class UiBtnController implements IUiBtnController {
+export class MenuBtnController implements IUiBtnController {
   #canvasBtn: HTMLButtonElement;
 
   constructor(btn: HTMLButtonElement) {
