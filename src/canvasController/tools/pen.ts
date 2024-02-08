@@ -7,7 +7,7 @@ export class Pen implements IStrokeTool {
   #context: CanvasRenderingContext2D;
   #type = "pen";
   #settings: IStrokeSettings = {
-    strokeStyle: "#fff",
+    strokeStyle: "#ffffff",
     lineWidth: 3,
     lineCap: "round",
     lineJoin: "round",

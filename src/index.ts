@@ -8,6 +8,8 @@ import {
   Dropdown,
   clearBtnController,
   openBtnController,
+  pickerController,
+  rangeController,
   saveBtnController,
 } from "./uiController";
 import { loadData, saveData } from "./canvasController/canvasData/manipulate";
@@ -65,6 +67,7 @@ if (boardController.ctx) {
   function uiSetup() {
     customElements.define("canvas-dropdown", Dropdown);
 
+    // menu
     saveBtnController.onClick(() => {
       const curDate = formatDate(new Date());
 
@@ -93,6 +96,22 @@ if (boardController.ctx) {
       cacheController.clearDataElements();
 
       canvasSetup();
+    });
+
+    // settings
+    const defaultPenColor =
+      toolsController.tools[pen.type].settings.strokeStyle.toString();
+    const defaultLineWidth =
+      toolsController.tools[pen.type].settings.lineWidth.toString();
+
+    pickerController.value = defaultPenColor;
+    pickerController.onChange((ev) => {
+      toolsController.activeTool.settings.strokeStyle = ev.target.value;
+    });
+
+    rangeController.value = defaultLineWidth;
+    rangeController.onChange((ev) => {
+      toolsController.activeTool.settings.lineWidth = ev.target.value;
     });
   }
 
