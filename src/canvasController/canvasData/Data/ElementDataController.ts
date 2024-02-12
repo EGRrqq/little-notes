@@ -27,7 +27,10 @@ export class ElementDataController implements IElementDataController {
 
   constructor(ctx: CanvasRenderingContext2D, settings: IStrokeSettings) {
     this.#ctx = ctx;
-    this.#settings = settings;
+
+    //@ts-ignore
+    this.#settings = {};
+    Object.assign(this.#settings, settings);
 
     this.#generateId(3);
   }

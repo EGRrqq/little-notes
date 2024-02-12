@@ -1,8 +1,5 @@
 import { IStrokeSettings, IStrokeTool } from "./IStrokeTool";
 
-// todo:
-// option for specific tool settings, like line stroke, color etc.
-// like draw(x, y, { lineWidth: 3, strokeStyle: #fff })
 export class Pen implements IStrokeTool {
   #context: CanvasRenderingContext2D;
   #type = "pen";
