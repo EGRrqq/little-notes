@@ -3,7 +3,10 @@ import "./style.css";
 import { CanvasController } from "./canvasController";
 import { MouseController, TouchController } from "./canvasController/inputs";
 import { Pen, ToolsController } from "./canvasController/tools";
-import { CacheController } from "./canvasController/canvasData/cache";
+import {
+  CacheController,
+  StateController,
+} from "./canvasController/canvasData/cache";
 import {
   Dropdown,
   clearBtnController,
@@ -105,13 +108,17 @@ if (boardController.ctx) {
       toolsController.tools[pen.type].settings.lineWidth.toString();
 
     pickerController.value = defaultPenColor;
-    pickerController.onChange((ev) => {
-      toolsController.activeTool.settings.strokeStyle = ev.target.value;
+    pickerController.onChange((e) => {
+      toolsController.activeTool.settings.strokeStyle = (
+        e.target as HTMLInputElement
+      ).value;
     });
 
     rangeController.value = defaultLineWidth;
-    rangeController.onChange((ev) => {
-      toolsController.activeTool.settings.lineWidth = ev.target.value;
+    rangeController.onChange((e) => {
+      toolsController.activeTool.settings.lineWidth = parseFloat(
+        (e.target as HTMLInputElement).value
+      );
     });
   }
 
