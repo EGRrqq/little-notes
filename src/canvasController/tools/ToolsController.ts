@@ -16,7 +16,8 @@ export class ToolsController implements ITollsController {
       this.#tools[tool.type] = tool;
     }
 
-    this.#activeTool = this.#tools[defaultToolType];
+    this.#activeTool = {} as IStrokeTool;
+    this.activeTool = defaultToolType;
   }
 
   get tools() {
@@ -27,7 +28,7 @@ export class ToolsController implements ITollsController {
     return this.#activeTool;
   }
 
-  set activeTool(tool: IStrokeTool) {
-    this.#activeTool = tool;
+  set activeTool(toolType: IStrokeTool["type"]) {
+    this.#activeTool = this.#tools[toolType];
   }
 }
