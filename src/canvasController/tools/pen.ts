@@ -22,6 +22,10 @@ export class Pen implements IStrokeTool {
     return this.#settings;
   }
 
+  set settings(settings: IStrokeSettings) {
+    this.#settings = Object.assign(settings);
+  }
+
   draw(
     x0: number,
     y0: number,

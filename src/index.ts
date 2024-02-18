@@ -5,6 +5,7 @@ import { MouseController, TouchController } from "./canvasController/inputs";
 import { Pen, ToolsController } from "./canvasController/tools";
 import {
   CacheController,
+  StateController,
 } from "./canvasController/canvasData/cache";
 import {
   Dropdown,
@@ -44,6 +45,8 @@ if (boardController.ctx) {
 
   cacheController.mouseAttach();
   cacheController.touchAttach();
+
+  const stateController = new StateController(toolsController);
 
   // canvas setup
   function iterateOverData() {
@@ -102,26 +105,26 @@ if (boardController.ctx) {
 
     // settings
     const defaultPenColor =
-      toolsController.tools[pen.type].settings.strokeStyle.toString();
+      toolsController.activeTool.settings.strokeStyle.toString();
     const defaultLineWidth =
-      toolsController.tools[pen.type].settings.lineWidth.toString();
+      toolsController.activeTool.settings.lineWidth.toString();
 
     pickerController.value = defaultPenColor;
     pickerController.onChange((e) => {
-      const value = (
-        e.target as HTMLInputElement
-      ).value;
+      const value = (e.target as HTMLInputElement).value;
 
       toolsController.activeTool.settings.strokeStyle = value;
+      stateController.stateData.activeTool.settings.strokeStyle = value;
+      stateController.storeDataElement();
     });
 
     rangeController.value = defaultLineWidth;
     rangeController.onChange((e) => {
-      const value = parseInt((
-        e.target as HTMLInputElement
-      ).value);
+      const value = parseInt((e.target as HTMLInputElement).value);
 
       toolsController.activeTool.settings.lineWidth = value;
+      stateController.stateData.activeTool.settings.lineWidth = value;
+      stateController.storeDataElement();
     });
   }
 
