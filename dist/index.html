@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,21 +6,58 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Little Notes</title>
-  <script type="module" crossorigin src="/little-notes/index-l-vF091l.js"></script>
-  <link rel="stylesheet" crossorigin href="/little-notes/index-Qi3JwlRl.css">
+  <script type="module" crossorigin src="/little-notes/index-jbcvopDM.js"></script>
+  <link rel="stylesheet" crossorigin href="/little-notes/index-OLp5xYEQ.css">
 </head>
 
 <body>
-  <article class="menu">
-    <button class="menu__item--onTop" id="menu__toggle-btn">M</button>
+  <canvas-dropdown isopen="false">
+    <span slot="dropdown__btn-text">M</span>
 
-    <section class="menu__item--onTop menu-dropdown--isClosed" id="menu-dropdown" data-is-open="false" aria-hidden="true">
-      <button id="menu-dropdown__open">open</button>
-      <button id="menu-dropdown__save">save to</button>
-      <hr class="menu-dropdown__divider">
-      <button id="menu-dropdown__clear">clear canvas</button>
+    <button id="menu__open" slot="dropdown__section-el">open</button>
+    <button id="menu__save" slot="dropdown__section-el">save to</button>
+    <hr class="menu__divider" slot="dropdown__section-el" />
+    <button id="menu__clear" slot="dropdown__section-el">clear canvas</button>
+  </canvas-dropdown>
+
+  <canvas-dropdown id="settings-dropdown" isopen="false">
+    <span slot="dropdown__btn-text">S</span>
+
+    <div class="dropdown__section-wrapper" slot="dropdown__section-el">
+      <input id="settings_picker" type="color" />
+      <input id="settings_range" min="1" max="100" type="range" />
+
+      <div>
+        <label for="settings_line-cap">line cap:</label>
+        <select name="line-cap" id="settings_line-cap">
+          <option value="butt">Butt</option>
+          <option value="round">Round</option>
+          <option value="square">Square</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="settings_line-join">line join:</label>
+        <select name="line-join" id="settings_line-join">
+          <option value="bevel">Bevel</option>
+          <option value="miter">Miter</option>
+          <option value="round">Round</option>
+        </select>
+      </div>
+    </div>
+  </canvas-dropdown>
+
+  <template id="dropdown">
+    <button id="dropdown__btn">
+      <slot name="dropdown__btn-text">toggle btn</slot>
+    </button>
+
+    <section id="dropdown__section">
+      <slot name="dropdown__section-el"></slot>
     </section>
-  </article>
+
+    <slot name="bruh" id="gruh"></slot>
+  </template>
 
   <canvas id="board"></canvas>
 </body>
