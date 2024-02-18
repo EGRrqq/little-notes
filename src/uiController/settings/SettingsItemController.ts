@@ -4,9 +4,9 @@ interface ISettingsItemController {
 }
 
 export class SettingsItemController implements ISettingsItemController {
-  #settingsItem: HTMLInputElement;
+  #settingsItem: HTMLInputElement | HTMLSelectElement;
 
-  constructor(element: HTMLInputElement) {
+  constructor(element: HTMLInputElement | HTMLSelectElement) {
     this.#settingsItem = element;
   }
 

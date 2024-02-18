@@ -10,6 +10,8 @@ import {
 import {
   Dropdown,
   clearBtnController,
+  lineCapController,
+  lineJoinController,
   openBtnController,
   pickerController,
   rangeController,
@@ -108,6 +110,8 @@ if (boardController.ctx) {
       toolsController.activeTool.settings.strokeStyle.toString();
     const defaultLineWidth =
       toolsController.activeTool.settings.lineWidth.toString();
+    const defaultLineCap = toolsController.activeTool.settings.lineCap;
+    const defaultLineJoin = toolsController.activeTool.settings.lineJoin;
 
     pickerController.value = defaultPenColor;
     pickerController.onChange((e) => {
@@ -124,6 +128,24 @@ if (boardController.ctx) {
 
       toolsController.activeTool.settings.lineWidth = value;
       stateController.stateData.activeTool.settings.lineWidth = value;
+      stateController.storeDataElement();
+    });
+
+    lineCapController.value = defaultLineCap;
+    lineCapController.onChange((e) => {
+      const value = (e.target as HTMLSelectElement).value as CanvasLineCap;
+
+      toolsController.activeTool.settings.lineCap = value;
+      stateController.stateData.activeTool.settings.lineCap = value;
+      stateController.storeDataElement();
+    });
+
+    lineJoinController.value = defaultLineJoin;
+    lineJoinController.onChange((e) => {
+      const value = (e.target as HTMLSelectElement).value as CanvasLineJoin;
+
+      toolsController.activeTool.settings.lineJoin = value;
+      stateController.stateData.activeTool.settings.lineJoin = value;
       stateController.storeDataElement();
     });
   }
